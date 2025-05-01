@@ -10,12 +10,12 @@
       <div class="space-y-6">
         <div class="space-y-2">
           <div v-if="!isCollapsed" class="text-xs font-regular text-gray-400 uppercase">منو</div>
-          <a href="#" class="flex items-center space-x-2 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg">
+          <NuxtLink to="/" class="flex items-center space-x-2 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg">
             <svg :class="['fill-none', isCollapsed ? 'h-6 w-6' : 'h-5 w-5']" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
             <span v-if="!isCollapsed" class="font-regular">داشبورد</span>
-          </a>
+          </NuxtLink>
           <div class="space-y-1">
             <button 
               class="w-full flex items-center justify-between px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg"
@@ -38,12 +38,12 @@
               </svg>
             </button>
             <div v-if="isUsersOpen && !isCollapsed" class="pr-4 space-y-1">
-              <a href="#" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
+              <NuxtLink to="/users/list" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
                 مدیریت کاربران
-              </a>
-              <a href="#" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
+              </NuxtLink>
+              <NuxtLink to="/users/register" class="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
                 ثبت کاربر جدید
-              </a>
+              </NuxtLink>
             </div>
           </div>
           <a href="#" class="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg">
