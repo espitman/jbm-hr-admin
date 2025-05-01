@@ -9,7 +9,7 @@
           <span class="text-gray-700 font-medium">مدیریت منابع انسانی</span>
         </div>
         <div id="nav-right-section" class="flex-1 flex items-center space-x-4 pl-4 border-r border-gray-200">
-          <button id="menu-toggle" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer">
+          <button id="menu-toggle" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer" @click="$emit('toggle-sidebar')">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>

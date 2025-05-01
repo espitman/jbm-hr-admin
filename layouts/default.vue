@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-100" dir="rtl">
-    <TopNav />
+    <TopNav @toggle-sidebar="isSidebarCollapsed = !isSidebarCollapsed" />
     <div class="flex pt-16">
-      <SideBar />
-      <main class="flex-1 p-6 mr-64">
+      <SideBar :is-collapsed="isSidebarCollapsed" />
+      <main :class="['flex-1 p-6', isSidebarCollapsed ? 'mr-16' : 'mr-64']">
         <slot />
       </main>
     </div>
@@ -11,7 +11,9 @@
 </template>
 
 <script setup>
-// No additional setup needed as components are auto-imported in Nuxt
+import { ref } from 'vue'
+
+const isSidebarCollapsed = ref(false)
 </script>
 
 <style>
