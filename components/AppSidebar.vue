@@ -50,5 +50,7 @@
 </template>
 
 <script setup lang="ts">
-// Component logic here
+defineOptions({
+  name: 'AppSidebar'
+})
 </script> 
