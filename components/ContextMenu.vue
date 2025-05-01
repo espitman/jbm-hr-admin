@@ -3,6 +3,9 @@
     v-if="isOpen"
     class="absolute left-0 mt-2 w-64 rounded-lg shadow-lg bg-white ring-1 ring-gray-200 ring-opacity-5 z-50 py-2"
   >
+    <!-- Triangle/Caret -->
+    <div class="absolute -top-2 left-3 w-4 h-4 rotate-45 transform bg-white border-t border-l border-gray-200"></div>
+
     <!-- User Info Section -->
     <div class="px-4 py-3 border-b border-gray-100">
       <div class="text-base font-medium text-gray-800">{{ userName }}</div>
