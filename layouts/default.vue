@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-100" dir="rtl">
     <TopNav />
-    <div class="flex">
+    <div class="flex pt-16">
       <SideBar />
-      <main class="flex-1 p-6">
+      <main class="flex-1 p-6 mr-64">
         <slot />
       </main>
     </div>

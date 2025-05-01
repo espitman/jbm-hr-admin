@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white border-l border-gray-200 w-64 min-h-screen" dir="rtl">
+  <div class="bg-white border-l border-gray-200 w-64 fixed top-16 right-0 overflow-y-auto h-[calc(100vh-4rem)]" dir="rtl">
     <div class="p-4">
       <div class="space-y-6">
         <div class="space-y-2">
