@@ -105,6 +105,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
+import { useAuth } from '~/composables/useAuth'
 
 definePageMeta({
   layout: 'empty'
@@ -112,6 +113,7 @@ definePageMeta({
 
 const { $api } = useNuxtApp()
 const toast = useToast()
+const { login } = useAuth()
 
 const form = ref({
   username: '',
@@ -125,13 +127,18 @@ const handleSubmit = async () => {
   try {
     loading.value = true
     
-    await $api.post('/api/v1/admin/login', {
+    const response = await $api.post('/api/v1/admin/login', {
       username: form.value.username,
       password: form.value.password
     })
     
-    // Handle successful login (e.g., store token, redirect)
-    toast.success('ورود موفقیت‌آمیز')
+    if (response.data?.token && response.data?.user) {
+      login(response.data.token, response.data.user)
+      toast.success('ورود موفقیت‌آمیز')
+      navigateTo('/')
+    } else {
+      toast.error('خطا در ورود به سیستم')
+    }
   } catch (err) {
     toast.error(err.message || 'خطا در ورود به سیستم')
   } finally {
