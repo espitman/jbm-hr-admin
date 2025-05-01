@@ -1,0 +1,15 @@
+@import './fonts.css';
+
+:root {
+  --font-family: 'Vazirmatn', sans-serif;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} 

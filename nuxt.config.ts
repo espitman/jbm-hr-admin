@@ -5,5 +5,14 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/ui'],
   devServer: {
     port: 3100
+  },
+  css: ['~/assets/css/main.css'],
+  app: {
+    head: {
+      htmlAttrs: {
+        dir: 'rtl',
+        lang: 'fa'
+      }
+    }
   }
 })
