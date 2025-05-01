@@ -15,11 +15,6 @@
             </svg>
           </button>
           <div class="flex-1"></div>
-          <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-          </button>
           <button id="layout-toggle" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer" @click="toggleFullscreen">
             <svg v-if="!isFullscreen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -34,12 +29,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
               <span class="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-            </button>
-            <button id="messages-btn" class="relative p-2 rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer">
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <span class="absolute top-1 right-1 h-2 w-2 bg-green-500 rounded-full"></span>
             </button>
             <button id="profile-btn" class="flex items-center space-x-2 cursor-pointer">
               <img class="h-8 w-8 rounded-full" src="~/public/images/avatar.jpg" alt="User avatar" />
