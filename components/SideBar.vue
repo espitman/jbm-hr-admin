@@ -36,3 +36,8 @@
 <script setup>
 // Component logic can be added here
 </script>
+
+<style>
+/* Import main CSS file */
+@import "~/assets/css/main.css";
+</style>
