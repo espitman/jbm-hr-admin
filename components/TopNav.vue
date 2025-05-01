@@ -30,7 +30,7 @@
             </svg>
             <span class="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
           </button>
-          <div class="relative context-menu-trigger">
+          <div class="relative context-menu-trigger ml-4">
             <button
               @click="toggleProfileMenu"
               class="flex items-center text-sm rounded-full focus:ring-4 focus:ring-gray-300"
