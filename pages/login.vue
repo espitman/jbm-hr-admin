@@ -18,24 +18,26 @@
           <h1 class="text-2xl font-bold text-gray-900 mb-8">ورود به سیستم</h1>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
-            <!-- Username/Email Input -->
+            <!-- Email Input -->
             <div>
-              <label for="username" class="block text-sm font-regular text-gray-700 mb-1">
-                نام کاربری
+              <label for="email" class="block text-sm font-regular text-gray-700 mb-1">
+                ایمیل
               </label>
               <div class="relative">
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                   <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                 </div>
                 <input
-                  id="username"
-                  v-model="form.username"
-                  type="text"
+                  id="email"
+                  v-model="form.email"
+                  type="email"
                   required
+                  dir="ltr"
                   class="block w-full pr-10 pl-3 py-2.5 text-gray-900 placeholder-gray-500 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="نام کاربری خود را وارد کنید"
+                  placeholder="Enter your email"
                 />
               </div>
             </div>
@@ -56,8 +58,9 @@
                   v-model="form.password"
                   :type="showPassword ? 'text' : 'password'"
                   required
+                  dir="ltr"
                   class="block w-full pr-10 pl-3 py-2.5 text-gray-900 placeholder-gray-500 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="رمز عبور خود را وارد کنید"
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
@@ -116,7 +119,7 @@ const toast = useToast()
 const { login } = useAuth()
 
 const form = ref({
-  username: '',
+  email: '',
   password: ''
 })
 
@@ -128,7 +131,7 @@ const handleSubmit = async () => {
     loading.value = true
     
     const response = await $api.post('/api/v1/admin/login', {
-      username: form.value.username,
+      email: form.value.email,
       password: form.value.password
     })
     
