@@ -45,7 +45,7 @@
               <span class="absolute top-1 right-1 h-2 w-2 bg-green-500 rounded-full"></span>
             </button>
             <button class="flex items-center space-x-2">
-              <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+              <img class="h-8 w-8 rounded-full" src="/images/avatar.jpg" alt="User avatar" />
             </button>
             <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
