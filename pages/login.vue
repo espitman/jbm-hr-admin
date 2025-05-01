@@ -48,11 +48,6 @@
                 رمز عبور
               </label>
               <div class="relative">
-                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
                 <input
                   id="password"
                   v-model="form.password"
@@ -65,7 +60,7 @@
                 <button
                   type="button"
                   @click="showPassword = !showPassword"
-                  class="absolute inset-y-0 left-0 flex items-center pl-3"
+                  class="absolute inset-y-0 right-0 flex items-center pr-3"
                 >
                   <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <template v-if="showPassword">
@@ -136,9 +131,14 @@ const handleSubmit = async () => {
     })
     
     if (response.data?.token && response.data?.user) {
-      login(response.data.token, response.data.user)
-      toast.success('ورود موفقیت‌آمیز')
-      navigateTo('/')
+      const success = await login(response.data.token, response.data.user)
+      if (success) {
+        toast.success('ورود موفقیت‌آمیز')
+        // Use window.location for a full page reload to ensure auth state is properly set
+        window.location.href = '/'
+      } else {
+        toast.error('خطا در ورود به سیستم')
+      }
     } else {
       toast.error('خطا در ورود به سیستم')
     }

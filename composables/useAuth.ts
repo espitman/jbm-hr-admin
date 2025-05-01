@@ -31,19 +31,30 @@ export const useAuth = () => {
     }
   }
 
-  const login = (token: string, userData: User) => {
-    const authToken = useCookie('auth_token', {
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/'
-    })
-    authToken.value = token
-    
-    if (getLocalStorage()) {
-      getLocalStorage()?.setItem('user', JSON.stringify(userData))
+  const login = async (token: string, userData: User) => {
+    try {
+      const authToken = useCookie('auth_token', {
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/'
+      })
+      authToken.value = token
+      
+      if (getLocalStorage()) {
+        getLocalStorage()?.setItem('user', JSON.stringify(userData))
+      }
+      
+      isAuthenticated.value = true
+      user.value = userData
+
+      // Set user data in global state
+      const { setUserData } = useUserData()
+      setUserData(userData)
+
+      return true
+    } catch (error) {
+      console.error('Login failed:', error)
+      return false
     }
-    
-    isAuthenticated.value = true
-    user.value = userData
   }
 
   const logout = () => {

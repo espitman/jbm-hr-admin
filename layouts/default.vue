@@ -12,14 +12,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useAuth } from '~/composables/useAuth'
 
 const isSidebarCollapsed = ref(false)
-const { logout } = useAuth()
 
 const handleLogout = () => {
-  logout()
-  navigateTo('/login')
+  navigateTo('/logout')
 }
 </script>
 
