@@ -1898,7 +1898,7 @@
     "@tailwindcss/oxide-win32-arm64-msvc" "4.1.5"
     "@tailwindcss/oxide-win32-x64-msvc" "4.1.5"
 
-"@tailwindcss/postcss@^4.1.4":
+"@tailwindcss/postcss@^4.1.4", "@tailwindcss/postcss@^4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@tailwindcss/postcss/-/postcss-4.1.5.tgz#108b32f81bdd94d9f420dcc40c606fee18881ef1"
   integrity sha512-5lAC2/pzuyfhsFgk6I58HcNy6vPK3dV/PoPxSDuOTVbDvCddYHzHiJZZInGIY0venvzzfrTEUAXJFULAfFmObg==
@@ -7266,7 +7266,7 @@ tailwind-variants@^1.0.0:
   dependencies:
     tailwind-merge "3.0.2"
 
-tailwindcss@4.1.5, tailwindcss@^4.1.4:
+tailwindcss@4.1.5, tailwindcss@^4.1.4, tailwindcss@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.1.5.tgz#d35607f1a351051bd29cda7e59ab2c222ca8deb6"
   integrity sha512-nYtSPfWGDiWgCkwQG/m+aX83XCwf62sBgg3bIlNiiOcggnS1x3uVRDAuyelBFL+vJdOPPCGElxv9DjHJjRHiVA==

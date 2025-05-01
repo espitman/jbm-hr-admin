@@ -14,5 +14,11 @@ export default defineNuxtConfig({
         lang: 'fa'
       }
     }
-  }
+  },
+  postcss: {
+    plugins: {
+      '@tailwindcss/postcss': {},
+      autoprefixer: {},
+    },
+  },
 })
