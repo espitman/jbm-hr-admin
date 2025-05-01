@@ -98,8 +98,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 const { $api } = useNuxtApp()
+const toast = useToast()
 
 const form = ref({
   email: '',
@@ -128,10 +130,11 @@ const handleSubmit = async () => {
       last_name: ''
     }
     
-    // Show success message or redirect
-    alert('کاربر با موفقیت ثبت شد')
+    // Show success toast
+    toast.success('کاربر با موفقیت ثبت شد')
   } catch (err) {
     error.value = err.message || 'خطا در ثبت کاربر'
+    toast.error(error.value)
   } finally {
     loading.value = false
   }

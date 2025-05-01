@@ -38,4 +38,13 @@
   html {
     font-family: 'Vazirmatn', system-ui, sans-serif;
   }
+}
+
+/* Add font-vazirmatn class for toast notifications */
+.font-vazirmatn {
+  font-family: 'Vazirmatn', system-ui, sans-serif !important;
+}
+
+.Vue-Toastification__container {
+  font-family: 'Vazirmatn', system-ui, sans-serif !important;
 } 
