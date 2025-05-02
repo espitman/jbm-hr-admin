@@ -1,8 +1,16 @@
 <template>
   <div class="container mx-auto p-1">
-    <h1 class="text-xl font-bold text-purple-700 mb-6">تیم منابع انسانی</h1>
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-xl font-bold text-purple-700">تیم منابع انسانی</h1>
+      <button
+        @click="openAddModal"
+        class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+      >
+        افزودن عضو جدید
+      </button>
+    </div>
 
-    <div v-if="loading" class="flex justify-center items-center h-64">
+    <div v-if="loading" class="flex justify-center items-center py-8">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
     </div>
 
@@ -74,6 +82,13 @@
       </div>
     </div>
 
+    <!-- Add Modal -->
+    <AddMemberModal
+      :is-open="isAddModalOpen"
+      @close="closeAddModal"
+      @success="fetchMembers"
+    />
+
     <!-- Edit Modal -->
     <EditMemberModal
       :is-open="isEditModalOpen"
@@ -96,11 +111,13 @@
 import { ref, onMounted } from 'vue'
 import EditMemberModal from '@/components/hrteam/EditMemberModal.vue'
 import DeleteMemberModal from '@/components/hrteam/DeleteMemberModal.vue'
+import AddMemberModal from '@/components/hrteam/AddMemberModal.vue'
 
 const { $api } = useNuxtApp()
 const members = ref([])
 const loading = ref(true)
 const error = ref(null)
+const isAddModalOpen = ref(false)
 const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 const selectedMember = ref(null)
@@ -136,6 +153,14 @@ const openDeleteModal = (member) => {
 const closeDeleteModal = () => {
   isDeleteModalOpen.value = false
   selectedMember.value = null
+}
+
+const openAddModal = () => {
+  isAddModalOpen.value = true
+}
+
+const closeAddModal = () => {
+  isAddModalOpen.value = false
 }
 
 onMounted(() => {
