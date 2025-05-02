@@ -11,7 +11,7 @@
         v-model="form.password" 
         type="password" 
         placeholder="رمز عبور جدید" 
-        class="w-full border border-gray-300 rounded px-3 py-2 text-sm" 
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm placeholder:text-right" 
         :disabled="role !== 'admin'"
         dir="ltr"
       />
@@ -19,7 +19,7 @@
         v-model="form.password_confirmation" 
         type="password" 
         placeholder="تکرار رمز عبور جدید" 
-        class="w-full border border-gray-300 rounded px-3 py-2 text-sm" 
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm placeholder:text-right" 
         :disabled="role !== 'admin'"
         dir="ltr"
       />
