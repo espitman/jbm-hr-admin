@@ -56,7 +56,15 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <button class="text-purple-600 hover:text-purple-900">ویرایش</button>
+                  <NuxtLink :to="`/users/${user.id}`">
+                    <button class="text-purple-600 hover:text-purple-900">
+                      <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13zm-6 6h12" />
+                        </svg>
+                      </div>
+                    </button>
+                  </NuxtLink>
                 </td>
               </tr>
             </tbody>
