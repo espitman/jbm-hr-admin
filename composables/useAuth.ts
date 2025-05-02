@@ -75,7 +75,7 @@ export const useAuth = () => {
 
     // Force a page reload to ensure auth state is cleared
     if (import.meta.client) {
-      window.location.href = '/login'
+      window.location.href = '/admin/login'
     }
   }
 

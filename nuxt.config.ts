@@ -14,5 +14,8 @@ export default defineNuxtConfig({
   },
   devServer: {
     port: 3100
+  },
+  app: {
+    baseURL: '/admin/'
   }
 })

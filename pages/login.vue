@@ -135,7 +135,7 @@ const handleSubmit = async () => {
       if (success) {
         toast.success('ورود موفقیت‌آمیز')
         // Use window.location for a full page reload to ensure auth state is properly set
-        window.location.href = '/'
+        window.location.href = '/admin/'
       } else {
         toast.error('خطا در ورود به سیستم')
       }
