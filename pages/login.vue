@@ -129,7 +129,7 @@ const handleSubmit = async () => {
       email: form.value.email,
       password: form.value.password
     })
-    
+    console.log(response)
     if (response.data?.token && response.data?.user) {
       const success = await login(response.data.token, response.data.user)
       if (success) {

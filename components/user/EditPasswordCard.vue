@@ -6,12 +6,40 @@
       </svg>
     </div>
     <div class="text-sm font-medium mb-4">تغییر رمز عبور</div>
-    <form class="w-full space-y-3" :class="{ 'opacity-50 pointer-events-none': role !== 'admin' }">
-      <input type="password" placeholder="رمز عبور جدید" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" :disabled="role !== 'admin'" />
-      <input type="password" placeholder="تکرار رمز عبور جدید" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" :disabled="role !== 'admin'" />
+    <form class="w-full space-y-3" :class="{ 'opacity-50 pointer-events-none': role !== 'admin' }" @submit.prevent="handleSubmit">
+      <input 
+        v-model="form.password" 
+        type="password" 
+        placeholder="رمز عبور جدید" 
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm" 
+        :disabled="role !== 'admin'"
+        dir="ltr"
+      />
+      <input 
+        v-model="form.password_confirmation" 
+        type="password" 
+        placeholder="تکرار رمز عبور جدید" 
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm" 
+        :disabled="role !== 'admin'"
+        dir="ltr"
+      />
       <div class="flex gap-2 mt-2">
-        <button type="button" class="flex-1 bg-green-500 text-white py-2 rounded" :disabled="role !== 'admin'">بروزرسانی</button>
-        <button type="button" class="flex-1 bg-red-400 text-white py-2 rounded" :disabled="role !== 'admin'">انصراف</button>
+        <button 
+          type="submit" 
+          class="flex-1 bg-green-500 text-white py-2 rounded cursor-pointer" 
+          :disabled="role !== 'admin' || loading"
+        >
+          <span v-if="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+          <span v-else>بروزرسانی</span>
+        </button>
+        <button 
+          type="button" 
+          class="flex-1 bg-red-400 text-white py-2 rounded cursor-pointer" 
+          :disabled="role !== 'admin' || loading"
+          @click="resetForm"
+        >
+          انصراف
+        </button>
       </div>
       <p v-if="role !== 'admin'" class="text-xs text-gray-500 text-center mt-2">امکان ست کردن رمز عبور فقط برای رول ادمین است.</p>
     </form>
@@ -19,10 +47,58 @@
 </template>
 
 <script setup>
-defineProps({
+import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
+
+const props = defineProps({
   role: {
     type: String,
     default: 'employee'
+  },
+  userId: {
+    type: [String, Number],
+    required: true
   }
 })
+
+const emit = defineEmits(['updated'])
+
+const { $api } = useNuxtApp()
+const toast = useToast()
+
+const form = ref({
+  password: '',
+  password_confirmation: ''
+})
+
+const loading = ref(false)
+const error = ref(null)
+
+const resetForm = () => {
+  form.value = {
+    password: '',
+    password_confirmation: ''
+  }
+}
+
+const handleSubmit = async () => {
+  try {
+    loading.value = true
+    error.value = null
+    
+    await $api.put(`/api/v1/admin/users/${props.userId}/password`, form.value)
+    
+    // Show success toast
+    toast.success('رمز عبور با موفقیت بروزرسانی شد')
+    // Reset form
+    resetForm()
+    // Emit event to parent
+    emit('updated')
+  } catch (err) {
+    error.value = err.message || 'خطا در بروزرسانی رمز عبور'
+    toast.error(error.value)
+  } finally {
+    loading.value = false
+  }
+}
 </script> 

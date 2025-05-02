@@ -36,14 +36,19 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
-      // Clear auth token and user data
-      const authToken = useCookie('auth_token')
-      authToken.value = null
+      // Check if the request was for login
+      const isLoginRequest = error.config?.url?.includes('/api/v1/admin/login')
       
-      if (import.meta.client) {
-        localStorage.removeItem('user')
-        // Redirect to login page
-        window.location.href = '/login'
+      if (!isLoginRequest) {
+        // Clear auth token and user data
+        const authToken = useCookie('auth_token')
+        authToken.value = null
+        
+        if (import.meta.client) {
+          localStorage.removeItem('user')
+          // Redirect to login page only if not a login request
+          window.location.href = '/login'
+        }
       }
       return Promise.reject(error)
     }
