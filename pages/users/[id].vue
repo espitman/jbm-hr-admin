@@ -38,7 +38,7 @@ const fetchUser = async () => {
     loading.value = true
     error.value = null
     const response = await $api.get(`/api/v1/admin/users/${route.params.id}`)
-    user.value = response.data.data || {}
+    user.value = response.data || {}
   } catch (err) {
     error.value = err.message || 'خطا در دریافت اطلاعات کاربر'
   } finally {

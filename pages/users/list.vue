@@ -1,6 +1,6 @@
 <template>
   <div class="p-1">
-    <h1 class="text-2xl font-regular mb-6">مدیریت کاربران</h1>
+    <h1 class="text-xl font-bold text-purple-700 mb-6">مدیریت کاربران</h1>
     <div class="bg-white rounded-lg shadow p-6">
       <!-- Loading state -->
       <div v-if="loading" class="flex justify-center items-center py-8">

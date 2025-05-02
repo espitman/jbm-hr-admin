@@ -1,6 +1,6 @@
 <template>
   <div class="p-1">
-    <h1 class="text-2xl font-regular mb-6">ثبت کاربر جدید</h1>
+    <h1 class="text-xl font-bold text-purple-700 mb-6">ثبت کاربر جدید</h1>
     <div class="bg-white rounded-lg shadow p-6">
       <form
         class="space-y-6"
