@@ -31,7 +31,9 @@ import { ref } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
 import ImageUpload from '@/components/ImageUpload.vue'
 import { useToast } from 'vue-toastification'
+import { useNuxtApp } from '#app'
 
+const { $api } = useNuxtApp()
 const props = defineProps({
   avatar: {
     type: String,
@@ -44,10 +46,14 @@ const props = defineProps({
   role: {
     type: String,
     default: 'کارمند'
+  },
+  userId: {
+    type: String,
+    required: true
   }
 })
 
-const emit = defineEmits(['update:avatar'])
+const emit = defineEmits(['update:avatar', 'success'])
 const toast = useToast()
 const isUploadModalOpen = ref(false)
 
@@ -59,9 +65,14 @@ const closeUploadModal = () => {
   isUploadModalOpen.value = false
 }
 
-const handleAvatarUploaded = (url) => {
-  emit('update:avatar', url)
-  toast.success('تصویر پروفایل با موفقیت بروزرسانی شد')
-  closeUploadModal()
+const handleAvatarUploaded = async (url) => {
+  try {
+    await $api.put(`/api/v1/admin/users/${props.userId}/avatar`, { avatar: url })
+    emit('update:avatar', url)
+    emit('success')
+    closeUploadModal()
+  } catch {
+    toast.error('خطا در بروزرسانی تصویر پروفایل')
+  }
 }
 </script> 

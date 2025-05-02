@@ -17,6 +17,9 @@
           :avatar="user.avatar"
           :name="user.first_name + ' ' + user.last_name"
           :role="user.role === 'admin' ? 'مدیر' : 'کارمند'"
+          :userId="user.id"
+          @update:avatar="handleAvatarUpdate"
+          @success="fetchUser"
         />
         <EditPasswordCard :role="user.role" :user-id="user.id" @updated="fetchUser" />
       </div>
