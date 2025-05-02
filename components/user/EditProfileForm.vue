@@ -47,6 +47,19 @@
         />
       </div>
 
+      <!-- Role -->
+      <div>
+        <label for="role" class="block text-sm font-medium text-gray-700 mb-1">نقش</label>
+        <select
+          id="role"
+          :value="user.role"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+        >
+          <option value="admin">مدیر</option>
+          <option value="employee">کارمند</option>
+        </select>
+      </div>
+
       <div class="pt-2">
         <button type="button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors">بروزرسانی</button>
       </div>

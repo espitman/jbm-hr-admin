@@ -6,16 +6,23 @@
       </svg>
     </div>
     <div class="text-sm font-medium mb-4">تغییر رمز عبور</div>
-    <form class="w-full space-y-3">
-      <input type="password" placeholder="رمز عبور جدید" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
-      <input type="password" placeholder="تکرار رمز عبور جدید" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+    <form class="w-full space-y-3" :class="{ 'opacity-50 pointer-events-none': role !== 'admin' }">
+      <input type="password" placeholder="رمز عبور جدید" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" :disabled="role !== 'admin'" />
+      <input type="password" placeholder="تکرار رمز عبور جدید" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" :disabled="role !== 'admin'" />
       <div class="flex gap-2 mt-2">
-        <button type="button" class="flex-1 bg-green-500 text-white py-2 rounded">بروزرسانی</button>
-        <button type="button" class="flex-1 bg-red-400 text-white py-2 rounded">انصراف</button>
+        <button type="button" class="flex-1 bg-green-500 text-white py-2 rounded" :disabled="role !== 'admin'">بروزرسانی</button>
+        <button type="button" class="flex-1 bg-red-400 text-white py-2 rounded" :disabled="role !== 'admin'">انصراف</button>
       </div>
+      <p v-if="role !== 'admin'" class="text-xs text-gray-500 text-center mt-2">امکان ست کردن رمز عبور فقط برای رول ادمین است.</p>
     </form>
   </div>
 </template>
 
 <script setup>
+defineProps({
+  role: {
+    type: String,
+    default: 'employee'
+  }
+})
 </script> 

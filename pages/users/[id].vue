@@ -9,7 +9,7 @@
           :name="user.first_name + ' ' + user.last_name"
           :role="user.role === 'admin' ? 'طراح وب' : 'کارمند'"
         />
-        <EditPasswordCard :avatar="user.avatar" />
+        <EditPasswordCard :role="user.role" />
       </div>
       <!-- Right Column -->
       <div class="col-span-2">
