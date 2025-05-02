@@ -26,10 +26,10 @@
       <div class="flex gap-2 mt-2">
         <button 
           type="submit" 
-          class="flex-1 bg-green-500 text-white py-2 rounded cursor-pointer" 
+          class="flex-1 bg-green-500 text-white py-2 rounded cursor-pointer flex items-center justify-center" 
           :disabled="role !== 'admin' || loading"
         >
-          <span v-if="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+          <span v-if="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white inline-block mr-2" />
           <span v-else>بروزرسانی</span>
         </button>
         <button 
@@ -85,6 +85,13 @@ const handleSubmit = async () => {
   try {
     loading.value = true
     error.value = null
+    
+    // Check if passwords match
+    if (form.value.password !== form.value.password_confirmation) {
+      toast.error('رمز عبور و تکرار آن مطابقت ندارند')
+      loading.value = false
+      return
+    }
     
     await $api.put(`/api/v1/admin/users/${props.userId}/password`, form.value)
     
