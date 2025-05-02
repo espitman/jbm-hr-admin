@@ -10,11 +10,11 @@
     <form @submit.prevent="handleSubmit" class="space-y-6">
       <!-- Full Name -->
       <div>
-        <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
+        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
         <input
           type="text"
-          id="full_name"
-          v-model="formData.full_name"
+          id="fullName"
+          v-model="formData.fullName"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
           required
         />
@@ -48,15 +48,14 @@
       <!-- Role -->
       <div>
         <label for="role" class="block text-sm font-medium text-gray-700 mb-1">نقش</label>
-        <select
+        <input
+          type="text"
           id="role"
           v-model="formData.role"
+          dir="ltr"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
           required
-        >
-          <option value="admin">مدیر</option>
-          <option value="employee">کارمند</option>
-        </select>
+        />
       </div>
 
       <!-- Error Message -->
@@ -89,7 +88,9 @@
 import { ref, watch } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
 import { useToast } from 'vue-toastification'
+import { useNuxtApp } from '#app'
 
+const { $api } = useNuxtApp()
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -107,7 +108,7 @@ const isLoading = ref(false)
 const error = ref(null)
 
 const formData = ref({
-  full_name: '',
+  fullName: '',
   email: '',
   phone: '',
   role: 'employee'
@@ -116,7 +117,7 @@ const formData = ref({
 watch(() => props.member, (newMember) => {
   if (newMember) {
     formData.value = {
-      full_name: newMember.full_name,
+      fullName: newMember.full_name,
       email: newMember.email,
       phone: newMember.phone,
       role: newMember.role
@@ -131,17 +132,7 @@ const closeModal = () => {
 const handleSubmit = async () => {
   try {
     isLoading.value = true
-    const response = await fetch(`/api/v1/admin/hr-team/${props.member.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData.value)
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to update member')
-    }
+    await $api.put(`/api/v1/admin/hr-team/${props.member.id}`, formData.value)
 
     toast.success('عضو تیم با موفقیت ویرایش شد')
     emit('success')

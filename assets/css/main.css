@@ -47,4 +47,8 @@
 
 .Vue-Toastification__container {
   font-family: 'Vazirmatn', system-ui, sans-serif !important;
+}
+
+button {
+  cursor: pointer;
 } 

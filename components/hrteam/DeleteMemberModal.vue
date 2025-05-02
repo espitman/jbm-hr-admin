@@ -34,7 +34,9 @@
 import { ref } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
 import { useToast } from 'vue-toastification'
+import { useNuxtApp } from '#app'
 
+const { $api } = useNuxtApp()
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -57,13 +59,7 @@ const closeModal = () => {
 const handleDelete = async () => {
   try {
     isLoading.value = true
-    const response = await fetch(`/api/v1/admin/hr-team/${props.member.id}`, {
-      method: 'DELETE'
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to delete member')
-    }
+    await $api.delete(`/api/v1/admin/hr-team/${props.member.id}`)
 
     toast.success('عضو تیم با موفقیت حذف شد')
     emit('success')
