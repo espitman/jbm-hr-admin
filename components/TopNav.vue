@@ -4,8 +4,8 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center">
           <button
-            @click="$emit('toggle-sidebar')"
             class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            @click="$emit('toggle-sidebar')"
           >
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
@@ -32,9 +32,9 @@
           </button>
           <div class="relative context-menu-trigger ml-4">
             <button
-              @click="toggleProfileMenu"
               class="flex items-center text-sm rounded-full focus:ring-4 focus:ring-gray-300"
               type="button"
+              @click="toggleProfileMenu"
             >
               <span class="sr-only">Open user menu</span>
               <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
