@@ -26,6 +26,7 @@
       <div v-if="showFooter" class="flex justify-end space-x-4">
         <slot name="footer">
           <button
+            v-if="showCancelButton"
             type="button"
             class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
             @click="closeModal"
@@ -56,6 +57,10 @@ const props = defineProps({
     validator: (value) => ['sm', 'md', 'lg'].includes(value)
   },
   showFooter: {
+    type: Boolean,
+    default: true
+  },
+  showCancelButton: {
     type: Boolean,
     default: true
   }

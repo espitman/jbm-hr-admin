@@ -7,7 +7,6 @@
   >
     <div class="text-center">
       <p class="text-gray-700 mb-4">آیا از حذف عضو تیم "{{ member.full_name }}" اطمینان دارید؟</p>
-      <p class="text-sm text-gray-500">این عمل قابل بازگشت نیست.</p>
     </div>
 
     <template #footer>

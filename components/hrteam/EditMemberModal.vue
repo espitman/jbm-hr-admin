@@ -3,74 +3,85 @@
     :is-open="isOpen"
     title="ویرایش عضو تیم"
     size="md"
+    :show-cancel-button="false"
+    :show-footer="false"
     @close="closeModal"
   >
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+    <form @submit.prevent="handleSubmit" class="space-y-6">
+      <!-- Full Name -->
       <div>
-        <label for="full_name" class="block text-sm font-medium text-gray-700">نام و نام خانوادگی</label>
+        <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
         <input
           type="text"
           id="full_name"
           v-model="formData.full_name"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
           required
         />
       </div>
 
+      <!-- Email -->
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">ایمیل</label>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">ایمیل</label>
         <input
           type="email"
           id="email"
           v-model="formData.email"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          dir="ltr"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
           required
         />
       </div>
 
+      <!-- Phone -->
       <div>
-        <label for="phone" class="block text-sm font-medium text-gray-700">شماره تماس</label>
+        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">شماره تماس</label>
         <input
           type="tel"
           id="phone"
           v-model="formData.phone"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
           required
         />
       </div>
 
+      <!-- Role -->
       <div>
-        <label for="role" class="block text-sm font-medium text-gray-700">نقش</label>
+        <label for="role" class="block text-sm font-medium text-gray-700 mb-1">نقش</label>
         <select
           id="role"
           v-model="formData.role"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
           required
         >
           <option value="admin">مدیر</option>
           <option value="employee">کارمند</option>
         </select>
       </div>
-    </form>
 
-    <template #footer>
-      <button
-        type="button"
-        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-        @click="closeModal"
-      >
-        انصراف
-      </button>
-      <button
-        type="button"
-        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-        @click="handleSubmit"
-        :disabled="isLoading"
-      >
-        <span v-if="isLoading">در حال ذخیره...</span>
-        <span v-else>ذخیره</span>
-      </button>
-    </template>
+      <!-- Error Message -->
+      <div v-if="error" class="text-red-600 text-sm text-center bg-red-50 py-2 px-4 rounded-lg">
+        {{ error }}
+      </div>
+
+      <div class="pt-2 flex gap-4">
+        <button
+          type="submit"
+          class="flex-[2] flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+          :disabled="isLoading"
+        >
+          <span v-if="isLoading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+          <span v-else>ذخیره</span>
+        </button>
+        <button
+          type="button"
+          class="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+          @click="closeModal"
+        >
+          انصراف
+        </button>
+      </div>
+    </form>
   </BaseModal>
 </template>
 
@@ -93,6 +104,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'success'])
 const toast = useToast()
 const isLoading = ref(false)
+const error = ref(null)
 
 const formData = ref({
   full_name: '',
@@ -134,9 +146,10 @@ const handleSubmit = async () => {
     toast.success('عضو تیم با موفقیت ویرایش شد')
     emit('success')
     closeModal()
-  } catch (error) {
+  } catch (err) {
     toast.error('خطا در ویرایش عضو تیم')
-    console.error('Error updating member:', error)
+    console.error('Error updating member:', err)
+    error.value = err.message
   } finally {
     isLoading.value = false
   }
