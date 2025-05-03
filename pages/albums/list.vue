@@ -32,6 +32,9 @@
         class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"
       >
         <div class="relative aspect-square">
+          <div class="absolute top-2 left-2 bg-purple-600 text-white px-2 py-1 rounded-md text-sm font-medium">
+            {{ album.display_order }}
+          </div>
           <img 
             :src="album.url" 
             :alt="album.caption"

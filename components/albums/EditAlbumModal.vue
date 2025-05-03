@@ -3,7 +3,7 @@
     :is-open="modelValue"
     :show-cancel-button="false"
     :show-footer="false"
-    title="ویرایش عنوان آلبوم"
+    title="ویرایش آلبوم"
     @close="$emit('update:modelValue', false)"
   >
     <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -16,6 +16,18 @@
           placeholder="عنوان آلبوم"
         />
       </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">ترتیب نمایش</label>
+        <input
+          v-model.number="form.display_order"
+          type="number"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md"
+          placeholder="ترتیب نمایش"
+        />
+      </div>
+
+      <input type="hidden" v-model="form.url" />
 
       <div class="flex justify-end gap-3 mt-6">
         <button
@@ -61,7 +73,9 @@ const { $api } = useNuxtApp()
 const toast = useToast()
 
 const form = ref({
-  caption: ''
+  caption: '',
+  display_order: 0,
+  url: ''
 })
 
 const isSubmitting = ref(false)
@@ -69,12 +83,12 @@ const isSubmitting = ref(false)
 const handleSubmit = async () => {
   try {
     isSubmitting.value = true
-    await $api.put(`/api/v1/albums/${props.album.id}`, form.value)
-    toast.success('عنوان آلبوم با موفقیت ویرایش شد')
+    await $api.put(`/api/v1/admin/albums/${props.album.id}`, form.value)
+    toast.success('آلبوم با موفقیت ویرایش شد')
     emit('updated')
     emit('update:modelValue', false)
   } catch {
-    toast.error('خطایی در ویرایش عنوان آلبوم رخ داد')
+    toast.error('خطایی در ویرایش آلبوم رخ داد')
   } finally {
     isSubmitting.value = false
   }
@@ -83,7 +97,9 @@ const handleSubmit = async () => {
 watch(() => props.album, (newAlbum) => {
   if (newAlbum) {
     form.value = {
-      caption: newAlbum.caption || ''
+      caption: newAlbum.caption || '',
+      display_order: newAlbum.display_order || 0,
+      url: newAlbum.url || ''
     }
   }
 }, { immediate: true })
