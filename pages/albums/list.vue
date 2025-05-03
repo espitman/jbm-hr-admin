@@ -1,7 +1,7 @@
 <template>
-  <div class="p-6">
+  <div class="container mx-auto p-1">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">آلبوم تصاویر</h1>
+      <h1 class="text-xl font-bold text-purple-700">آلبوم تصاویر</h1>
       <button 
         @click="openUploadModal"
         class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200"
