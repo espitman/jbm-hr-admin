@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
     <div 
       class="bg-white rounded-lg p-6 mx-4"
-      :class="[size === 'sm' ? 'max-w-sm' : size === 'lg' ? 'max-w-3xl' : 'max-w-md']"
+      :class="[size === 'sm' ? 'w-sm' : size === 'lg' ? 'w-3xl' : 'w-md']"
     >
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">

@@ -11,7 +11,7 @@
         ref="fileInput"
         type="file"
         class="hidden"
-        accept="image/*"
+        accept="image/*,.svg"
         @change="handleFileChange"
       />
       <div class="space-y-2">
@@ -24,7 +24,7 @@
           </label>
           <p class="mt-1">یا فایل را بکشید و رها کنید</p>
         </div>
-        <p class="text-xs text-gray-500 text-center">PNG, JPG, GIF تا 10MB</p>
+        <p class="text-xs text-gray-500 text-center">PNG, JPG, GIF, SVG تا 10MB</p>
       </div>
     </div>
 
@@ -90,8 +90,8 @@ const handleFile = async (file) => {
   isLoading.value = true
 
   // Validate file type
-  if (!file.type.startsWith('image/')) {
-    error.value = 'لطفا یک فایل تصویر انتخاب کنید'
+  if (!file.type.startsWith('image/') && !file.name.endsWith('.svg')) {
+    error.value = 'لطفا یک فایل تصویر یا SVG انتخاب کنید'
     isLoading.value = false
     return
   }
