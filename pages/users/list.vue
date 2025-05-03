@@ -19,6 +19,9 @@
             <thead class="bg-gray-50">
               <tr>
                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  آواتار
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   نام و نام خانوادگی
                 </th>
                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -37,6 +40,21 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="user in users" :key="user.id">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+                      <img 
+                        v-if="user.avatar" 
+                        :src="user.avatar" 
+                        :alt="`${user.first_name} ${user.last_name}`"
+                        class="h-full w-full object-cover"
+                      />
+                      <div v-else class="h-full w-full flex items-center justify-center bg-gray-200">
+                        <span class="text-gray-500 text-lg">{{ user.first_name[0] }}{{ user.last_name[0] }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ user.first_name }} {{ user.last_name }}</div>
                 </td>
