@@ -1,12 +1,20 @@
 <template>
   <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-    <img
-      class="w-24 h-24 rounded-full object-cover mb-4 border-4 border-white shadow cursor-pointer"
-      :src="avatar || 'https://randomuser.me/api/portraits/men/1.jpg'"
-      alt="User Avatar"
+    <div 
+      class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow cursor-pointer"
       @click="openUploadModal"
-    />
-    <div class="text-lg font-semibold">{{ name }}</div>
+    >
+      <img
+        v-if="avatar"
+        class="w-full h-full object-cover"
+        :src="avatar"
+        alt="User Avatar"
+      />
+      <div v-else class="h-full w-full flex items-center justify-center bg-gray-200">
+        <span class="text-gray-500 text-4xl">{{ getInitials(name) }}</span>
+      </div>
+    </div>
+    <div class="text-lg font-semibold mt-4">{{ name }}</div>
     <div class="text-sm text-gray-500">{{ role }}</div>
   </div>
 
@@ -37,7 +45,7 @@ const { $api } = useNuxtApp()
 const props = defineProps({
   avatar: {
     type: String,
-    default: 'https://randomuser.me/api/portraits/men/1.jpg'
+    default: undefined
   },
   name: {
     type: String,
@@ -74,5 +82,13 @@ const handleAvatarUploaded = async (url) => {
   } catch {
     toast.error('خطا در بروزرسانی تصویر پروفایل')
   }
+}
+
+const getInitials = (name) => {
+  const parts = name.split(' ')
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`
+  }
+  return name[0]
 }
 </script> 
