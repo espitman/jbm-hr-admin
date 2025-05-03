@@ -230,12 +230,8 @@ const closeModal = () => {
 const handleSubmit = async () => {
   try {
     loading.value = true
-    const submitData = {
-      ...formData.value,
-      display_order: formData.value.display_order
-    }
-    console.log('Submitting data:', submitData)
-    await $api.put(`/api/v1/admin/departments/${props.department.id}`, submitData)
+    console.log('Submitting data:', formData.value)
+    await $api.put(`/api/v1/admin/departments/${props.department.id}`, formData.value)
 
     toast.success('دپارتمان با موفقیت ویرایش شد')
     emit('success')

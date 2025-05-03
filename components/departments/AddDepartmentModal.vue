@@ -81,7 +81,7 @@
           <div class="space-y-2">
             <label class="block text-sm font-medium text-gray-700">ترتیب نمایش</label>
             <input
-              v-model="formData.displayOrder"
+              v-model="formData.display_order"
               type="number"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
@@ -200,7 +200,7 @@ const formData = ref({
   color: '',
   icon: '',
   image: '',
-  displayOrder: 0
+  display_order: 0
 })
 
 const closeModal = () => {
@@ -210,6 +210,7 @@ const closeModal = () => {
 const handleSubmit = async () => {
   try {
     loading.value = true
+    console.log('Submitting data:', formData.value)
     await $api.post('/api/v1/admin/departments', formData.value)
 
     toast.success('دپارتمان با موفقیت افزوده شد')
