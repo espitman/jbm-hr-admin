@@ -58,6 +58,18 @@
         />
       </div>
 
+      <!-- Display Order -->
+      <div>
+        <label for="displayOrder" class="block text-sm font-medium text-gray-700 mb-1">ترتیب نمایش</label>
+        <input
+          v-model="formData.displayOrder"
+          id="displayOrder"
+          type="number"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          required
+        />
+      </div>
+
       <!-- Error Message -->
       <div v-if="error" class="text-red-600 text-sm text-center bg-red-50 py-2 px-4 rounded-lg">
         {{ error }}
@@ -107,7 +119,8 @@ const formData = ref({
   fullName: '',
   email: '',
   phone: '',
-  role: ''
+  role: '',
+  displayOrder: 0
 })
 
 const closeModal = () => {
