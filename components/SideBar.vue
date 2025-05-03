@@ -79,12 +79,18 @@
             </svg>
             <span v-if="!isCollapsed" class="font-regular">تیم HR</span>
           </NuxtLink>
-          <a href="#" class="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg">
+          <NuxtLink 
+            to="/departments/list" 
+            :class="[
+              'flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200',
+              route.path === '/departments/list' ? 'text-purple-600 bg-purple-50' : 'text-gray-600 hover:bg-gray-50'
+            ]"
+          >
             <svg :class="['fill-none', isCollapsed ? 'h-6 w-6' : 'h-5 w-5']" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
             <span v-if="!isCollapsed" class="font-regular">دپارتمان‌ها</span>
-          </a>
+          </NuxtLink>
           <a href="#" class="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg">
             <svg :class="['fill-none', isCollapsed ? 'h-6 w-6' : 'h-5 w-5']" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
