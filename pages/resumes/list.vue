@@ -18,10 +18,10 @@
           <thead class="bg-gray-50">
             <tr>
               <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                معرف
+                معرفی شده
               </th>
               <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                شماره تماس معرف
+                شماره تماس معرفی شده
               </th>
               <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 موقعیت شغلی
@@ -57,8 +57,8 @@
                 <div class="text-sm text-gray-900">{{ formatDate(resume.created_at) }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <button
-                  @click="viewResume(resume)"
+                <NuxtLink
+                  :to="`/resumes/${resume.id}`"
                   class="text-purple-600 hover:text-purple-900 ml-4 cursor-pointer"
                 >
                   <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100">
@@ -67,7 +67,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   </div>
-                </button>
+                </NuxtLink>
                 <button
                   @click="downloadResume(resume)"
                   class="text-green-600 hover:text-green-900 cursor-pointer"
@@ -147,10 +147,6 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   }).format(date)
-}
-
-const viewResume = (resume) => {
-  window.open(resume.file, '_blank')
 }
 
 const downloadResume = (resume) => {
