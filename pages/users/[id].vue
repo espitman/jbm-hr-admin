@@ -21,6 +21,8 @@
           :birthdate="user.birthdate"
           :cooperation_start_date="user.cooperation_start_date"
           @update:avatar="handleAvatarUpdate"
+          @update:birthdate="handleBirthdateUpdate"
+          @update:cooperation_start_date="handleCooperationStartDateUpdate"
           @success="fetchUser"
         />
         <EditPasswordCard :role="user.role" :user-id="user.id" @updated="fetchUser" />
@@ -58,6 +60,14 @@ const fetchUser = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleBirthdateUpdate = (newDate) => {
+  user.value.birthdate = newDate
+}
+
+const handleCooperationStartDateUpdate = (newDate) => {
+  user.value.cooperation_start_date = newDate
 }
 
 onMounted(() => {

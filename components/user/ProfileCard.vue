@@ -21,11 +21,25 @@
     <div class="w-full mt-6 space-y-2 text-sm">
       <div class="flex justify-between items-center">
         <span class="text-gray-500">تاریخ تولد:</span>
-        <span class="text-gray-900">{{ formatDate(birthdate) }}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-gray-900">{{ formatDate(birthdate) }}</span>
+          <button @click="openDateModal('birthdate')" class="text-purple-600 hover:text-purple-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="flex justify-between items-center">
         <span class="text-gray-500">تاریخ شروع همکاری:</span>
-        <span class="text-gray-900">{{ formatDate(cooperation_start_date) }}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-gray-900">{{ formatDate(cooperation_start_date) }}</span>
+          <button @click="openDateModal('cooperation_start_date')" class="text-purple-600 hover:text-purple-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -44,14 +58,50 @@
       @uploaded="handleAvatarUploaded"
     />
   </BaseModal>
+
+  <!-- Date Edit Modal -->
+  <BaseModal
+    :is-open="isDateModalOpen"
+    :title="dateModalTitle"
+    size="sm"
+    @close="closeDateModal"
+  >
+    <div class="p-4">
+      <date-picker
+        v-model="selectedDate"
+        format="YYYY-MM-DD"
+        display-format="jYYYY-jMM-jDD"
+        :editable="false"
+        :auto-submit="false"
+        input-class="w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+      />
+    </div>
+    <template #footer>
+      <div class="flex justify-end gap-2">
+        <button
+          @click="closeDateModal"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+        >
+          انصراف
+        </button>
+        <button
+          @click="handleDateUpdate"
+          class="px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+        >
+          ذخیره
+        </button>
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
 import ImageUpload from '@/components/ImageUpload.vue'
 import { useToast } from 'vue-toastification'
 import { useNuxtApp } from '#app'
+import DatePicker from 'vue3-persian-datetime-picker'
 
 const { $api } = useNuxtApp()
 const props = defineProps({
@@ -81,9 +131,16 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:avatar', 'success'])
+const emit = defineEmits(['update:avatar', 'success', 'update:birthdate', 'update:cooperation_start_date'])
 const toast = useToast()
 const isUploadModalOpen = ref(false)
+const isDateModalOpen = ref(false)
+const selectedDate = ref(null)
+const editingField = ref(null)
+
+const dateModalTitle = computed(() => {
+  return editingField.value === 'birthdate' ? 'تغییر تاریخ تولد' : 'تغییر تاریخ شروع همکاری'
+})
 
 const formatDate = (date) => {
   if (!date) return '-'
@@ -96,6 +153,32 @@ const openUploadModal = () => {
 
 const closeUploadModal = () => {
   isUploadModalOpen.value = false
+}
+
+const openDateModal = (field) => {
+  editingField.value = field
+  selectedDate.value = props[field] || ''
+  isDateModalOpen.value = true
+}
+
+const closeDateModal = () => {
+  isDateModalOpen.value = false
+  editingField.value = null
+  selectedDate.value = null
+}
+
+const handleDateUpdate = async () => {
+  try {
+    await $api.put(`/api/v1/admin/users/${props.userId}`, {
+      [editingField.value]: selectedDate.value
+    })
+    emit(`update:${editingField.value}`, selectedDate.value)
+    emit('success')
+    closeDateModal()
+    toast.success('تاریخ با موفقیت بروزرسانی شد')
+  } catch {
+    toast.error('خطا در بروزرسانی تاریخ')
+  }
 }
 
 const handleAvatarUploaded = async (url) => {
