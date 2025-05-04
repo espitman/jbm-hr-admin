@@ -91,6 +91,37 @@
           </select>
         </div>
 
+        <!-- Birthdate and Cooperation Start Date -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Birthdate -->
+          <div>
+            <label for="birthdate" class="block text-sm font-medium text-gray-700 mb-1">تاریخ تولد</label>
+            <date-picker
+              id="birthdate"
+              v-model="form.birthdate"
+              format="YYYY-MM-DD"
+              display-format="jYYYY-jMM-jDD"
+              :editable="false"
+              :auto-submit="false"
+              input-class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+            />
+          </div>
+
+          <!-- Cooperation Start Date -->
+          <div>
+            <label for="cooperation_start_date" class="block text-sm font-medium text-gray-700 mb-1">تاریخ شروع همکاری</label>
+            <date-picker
+              id="cooperation_start_date"
+              v-model="form.cooperation_start_date"
+              format="YYYY-MM-DD"
+              display-format="jYYYY-jMM-jDD"
+              :editable="false"
+              :auto-submit="false"
+              input-class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+            />
+          </div>
+        </div>
+
         <!-- Submit Button -->
         <div class="pt-2">
           <button
@@ -115,6 +146,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
+import DatePicker from 'vue3-persian-datetime-picker'
 
 const { $api } = useNuxtApp()
 const toast = useToast()
@@ -125,7 +157,9 @@ const form = ref({
   role: 'employee',
   first_name: '',
   last_name: '',
-  department_id: ''
+  department_id: '',
+  birthdate: '',
+  cooperation_start_date: ''
 })
 
 const departments = ref([])
@@ -158,7 +192,9 @@ const handleSubmit = async () => {
       role: 'employee',
       first_name: '',
       last_name: '',
-      department_id: ''
+      department_id: '',
+      birthdate: '',
+      cooperation_start_date: ''
     }
     
     // Show success toast
