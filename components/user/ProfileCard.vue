@@ -81,14 +81,23 @@
         <button
           @click="closeDateModal"
           class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          :disabled="isDateUpdating"
         >
           انصراف
         </button>
         <button
           @click="handleDateUpdate"
-          class="px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          class="px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          :disabled="isDateUpdating"
         >
-          ذخیره
+          <span v-if="isDateUpdating" class="flex items-center gap-2">
+            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            در حال ذخیره...
+          </span>
+          <span v-else>ذخیره</span>
         </button>
       </div>
     </template>
@@ -137,6 +146,7 @@ const isUploadModalOpen = ref(false)
 const isDateModalOpen = ref(false)
 const selectedDate = ref(null)
 const editingField = ref(null)
+const isDateUpdating = ref(false)
 
 const dateModalTitle = computed(() => {
   return editingField.value === 'birthdate' ? 'تغییر تاریخ تولد' : 'تغییر تاریخ شروع همکاری'
@@ -169,6 +179,7 @@ const closeDateModal = () => {
 
 const handleDateUpdate = async () => {
   try {
+    isDateUpdating.value = true
     const endpoint = editingField.value === 'birthdate' 
       ? `/api/v1/admin/users/${props.userId}/birthdate`
       : `/api/v1/admin/users/${props.userId}/cooperation-start-date`
@@ -182,6 +193,8 @@ const handleDateUpdate = async () => {
     toast.success('تاریخ با موفقیت بروزرسانی شد')
   } catch {
     toast.error('خطا در بروزرسانی تاریخ')
+  } finally {
+    isDateUpdating.value = false
   }
 }
 
