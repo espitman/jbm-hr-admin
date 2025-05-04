@@ -16,6 +16,18 @@
     </div>
     <div class="text-lg font-semibold mt-4">{{ name }}</div>
     <div class="text-sm text-gray-500">{{ role }}</div>
+    
+    <!-- User Info -->
+    <div class="w-full mt-6 space-y-2 text-sm">
+      <div class="flex justify-between items-center">
+        <span class="text-gray-500">تاریخ تولد:</span>
+        <span class="text-gray-900">{{ formatDate(birthdate) }}</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-500">تاریخ شروع همکاری:</span>
+        <span class="text-gray-900">{{ formatDate(cooperation_start_date) }}</span>
+      </div>
+    </div>
   </div>
 
   <!-- Upload Modal -->
@@ -58,12 +70,25 @@ const props = defineProps({
   userId: {
     type: String,
     required: true
+  },
+  birthdate: {
+    type: String,
+    default: undefined
+  },
+  cooperation_start_date: {
+    type: String,
+    default: undefined
   }
 })
 
 const emit = defineEmits(['update:avatar', 'success'])
 const toast = useToast()
 const isUploadModalOpen = ref(false)
+
+const formatDate = (date) => {
+  if (!date) return '-'
+  return new Date(date).toLocaleDateString('fa-IR')
+}
 
 const openUploadModal = () => {
   isUploadModalOpen.value = true
