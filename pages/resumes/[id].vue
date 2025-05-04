@@ -45,7 +45,18 @@
           <div class="bg-white shadow-md rounded-lg overflow-hidden h-full">
             <div class="p-6">
               <div class="h-[calc(100vh-400px)] flex items-center justify-center bg-gray-50 rounded-lg">
+                <div v-if="loadingPdf" class="flex flex-col items-center">
+                  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
+                  <p class="text-gray-500">در حال بارگذاری رزومه...</p>
+                </div>
+                <iframe
+                  v-else-if="pdfUrl"
+                  :src="`https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`"
+                  class="w-full h-full"
+                  frameborder="0"
+                ></iframe>
                 <button
+                  v-else
                   @click="viewResume"
                   class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                 >
@@ -124,6 +135,8 @@ const resume = ref(null)
 const loading = ref(true)
 const error = ref(null)
 const { $api } = useNuxtApp()
+const pdfUrl = ref(null)
+const loadingPdf = ref(false)
 
 const fetchResume = async () => {
   try {
@@ -179,9 +192,18 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
-const viewResume = () => {
-  alert(resume.value.file)
-  window.open(resume.value.file, '_blank')
+const viewResume = async () => {
+  try {
+    loadingPdf.value = true
+    // Get presigned URL
+    const response = await $api.get(`/api/v1/upload/presigned/${resume.value.file}`)
+    pdfUrl.value = response.data.url
+  } catch (error) {
+    console.error('Error loading PDF:', error)
+    alert('خطا در مشاهده فایل')
+  } finally {
+    loadingPdf.value = false
+  }
 }
 
 const downloadResume = async () => {
