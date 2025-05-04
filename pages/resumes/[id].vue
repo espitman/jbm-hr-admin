@@ -180,16 +180,27 @@ const formatDate = (dateString) => {
 }
 
 const viewResume = () => {
+  alert(resume.value.file)
   window.open(resume.value.file, '_blank')
 }
 
-const downloadResume = () => {
-  const link = document.createElement('a')
-  link.href = resume.value.file
-  link.download = `resume-${resume.value.introduced_name}.pdf`
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+const downloadResume = async () => {
+  try {
+    // Get presigned URL
+    const response = await $api.get(`/api/v1/upload/presigned/${resume.value.file}`)
+    const presignedUrl = response.data.url
+
+    // Download the file using the presigned URL
+    const link = document.createElement('a')
+    link.href = presignedUrl
+    link.download = `resume-${resume.value.introduced_name}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  } catch (error) {
+    console.error('Error downloading file:', error)
+    alert('خطا در دانلود فایل')
+  }
 }
 
 onMounted(() => {
