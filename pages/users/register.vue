@@ -75,6 +75,22 @@
           </select>
         </div>
 
+        <!-- Department -->
+        <div>
+          <label for="department_id" class="block text-sm font-medium text-gray-700 mb-1">دپارتمان</label>
+          <select
+            id="department_id"
+            v-model="form.department_id"
+            class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+            required
+          >
+            <option value="">انتخاب دپارتمان</option>
+            <option v-for="dept in departments" :key="dept.id" :value="dept.id">
+              {{ dept.title }}
+            </option>
+          </select>
+        </div>
+
         <!-- Submit Button -->
         <div class="pt-2">
           <button
@@ -97,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 
 const { $api } = useNuxtApp()
@@ -108,11 +124,25 @@ const form = ref({
   phone: '',
   role: 'employee',
   first_name: '',
-  last_name: ''
+  last_name: '',
+  department_id: ''
 })
 
+const departments = ref([])
 const loading = ref(false)
 const error = ref(null)
+
+const fetchDepartments = async () => {
+  try {
+    loading.value = true
+    const response = await $api.get('/api/v1/departments')
+    departments.value = response.data.departments || []
+  } catch {
+    toast.error('خطا در دریافت لیست دپارتمان‌ها')
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleSubmit = async () => {
   try {
@@ -127,7 +157,8 @@ const handleSubmit = async () => {
       phone: '',
       role: 'employee',
       first_name: '',
-      last_name: ''
+      last_name: '',
+      department_id: ''
     }
     
     // Show success toast
@@ -139,6 +170,10 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  fetchDepartments()
+})
 </script>
 
 <style>
