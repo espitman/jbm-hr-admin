@@ -34,6 +34,9 @@
                   نقش
                 </th>
                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  دپارتمان
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   عملیات
                 </th>
               </tr>
@@ -72,6 +75,9 @@
                   ]">
                     {{ user.role === 'admin' ? 'مدیر' : 'کارمند' }}
                   </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ user.department?.title || '-' }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <NuxtLink :to="`/users/${user.id}`">
