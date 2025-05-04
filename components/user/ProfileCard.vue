@@ -169,7 +169,11 @@ const closeDateModal = () => {
 
 const handleDateUpdate = async () => {
   try {
-    await $api.put(`/api/v1/admin/users/${props.userId}`, {
+    const endpoint = editingField.value === 'birthdate' 
+      ? `/api/v1/admin/users/${props.userId}/birthdate`
+      : `/api/v1/admin/users/${props.userId}/cooperation-start-date`
+    
+    await $api.put(endpoint, {
       [editingField.value]: selectedDate.value
     })
     emit(`update:${editingField.value}`, selectedDate.value)
