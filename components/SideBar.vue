@@ -103,12 +103,18 @@
             </svg>
             <span v-if="!isCollapsed" class="font-regular">آلبوم‌ها</span>
           </NuxtLink>
-          <a href="#" class="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-50 rounded-lg">
+          <NuxtLink 
+            to="/requests/list" 
+            :class="[
+              'flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200',
+              $route.path.startsWith('/requests') ? 'text-purple-600 bg-purple-50' : 'text-gray-600 hover:bg-gray-50'
+            ]"
+          >
             <svg :class="['fill-none', isCollapsed ? 'h-6 w-6' : 'h-5 w-5']" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
             <span v-if="!isCollapsed" class="font-regular">درخواست‌ها</span>
-          </a>
+          </NuxtLink>
           <NuxtLink
             to="/resumes/list"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-lg"
