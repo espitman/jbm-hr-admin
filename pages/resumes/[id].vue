@@ -18,10 +18,19 @@
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4 space-x">
-              <div class="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center">
-                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+              <div v-if="resume.introduced_avatar" class="w-16 h-16">
+                <img
+                  :src="resume.introduced_avatar"
+                  :alt="resume.introduced_name"
+                  class="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <div v-else class="w-16 h-16">
+                <img
+                  :src="`https://ui-avatars.com/api/?name=${encodeURIComponent(resume.introduced_name)}&background=amber-500&color=fff`"
+                  :alt="resume.introduced_name"
+                  class="w-full h-full rounded-full object-cover"
+                />
               </div>
               <div>
                 <h2 class="text-lg font-semibold text-gray-900">{{ resume.introduced_name }}</h2>
@@ -85,24 +94,30 @@
           </button>
 
           <!-- Introduced By Card -->
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <div class="p-6">
-              <h3 class="text-sm font-medium text-gray-500 mb-4">معرفی شده توسط</h3>
-              <div class="flex items-center space-x-4 space-x">
+          <ContentBox title="معرفی شده توسط">
+            <div class="flex items-center space-x-4 space-x">
+              <div v-if="resume.user.avatar" class="w-12 h-12">
                 <img
                   :src="resume.user.avatar"
                   :alt="resume.user.first_name + ' ' + resume.user.last_name"
-                  class="w-12 h-12 rounded-full object-cover"
+                  class="w-full h-full rounded-full object-cover"
                 />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">
-                    {{ resume.user.first_name }} {{ resume.user.last_name }}
-                  </p>
-                  <p class="text-xs text-gray-500">{{ resume.user.email }}</p>
-                </div>
+              </div>
+              <div v-else class="w-12 h-12">
+                <img
+                  :src="`https://ui-avatars.com/api/?name=${encodeURIComponent(resume.user.first_name + ' ' + resume.user.last_name)}&background=amber-500&color=fff`"
+                  :alt="resume.user.first_name + ' ' + resume.user.last_name"
+                  class="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900">
+                  {{ resume.user.first_name }} {{ resume.user.last_name }}
+                </p>
+                <p class="text-xs text-gray-500">{{ resume.user.email }}</p>
               </div>
             </div>
-          </div>
+          </ContentBox>
 
           <!-- Timeline Card -->
           <div class="bg-white shadow-md rounded-lg overflow-hidden">
