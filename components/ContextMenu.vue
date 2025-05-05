@@ -8,8 +8,8 @@
 
     <!-- User Info Section -->
     <div class="px-4 py-3 border-b border-gray-100">
-      <div class="text-base font-medium text-gray-800">{{ userName }}</div>
-      <div class="text-sm text-gray-500">{{ userRole }}</div>
+      <div class="text-sm font-medium text-gray-800">{{ fullName }}</div>
+      <div class="text-xs text-gray-500">{{ persianRole }}</div>
     </div>
 
     <!-- Menu Items -->
@@ -82,8 +82,21 @@ const emit = defineEmits(['close', 'logout'])
 
 const { user } = useAuth()
 
-const userName = computed(() => user.value?.name || '')
-const userRole = computed(() => 'Admin')
+const fullName = computed(() => {
+  if (!user.value?.first_name || !user.value?.last_name) return ''
+  return `${user.value.first_name} ${user.value.last_name}`
+})
+
+const persianRole = computed(() => {
+  const role = user.value?.role || ''
+  const roleMap = {
+    'admin': 'مدیر',
+    'manager': 'مدیر',
+    'employee': 'کارمند',
+    'user': 'کاربر'
+  }
+  return roleMap[role.toLowerCase()] || role
+})
 
 const closeMenu = () => {
   emit('close')

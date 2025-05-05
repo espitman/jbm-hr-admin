@@ -38,7 +38,13 @@
             >
               <span class="sr-only">Open user menu</span>
               <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
-                <span class="text-white font-medium">{{ userInitials }}</span>
+                <img
+                  v-if="userData?.data?.avatar"
+                  :src="userData.data.avatar"
+                  class="w-full h-full rounded-full object-cover"
+                  alt="User avatar"
+                />
+                <span v-else class="text-white font-medium">{{ userInitials }}</span>
               </div>
             </button>
             <ContextMenu
@@ -60,13 +66,16 @@
   </nav>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuth } from '~/composables/useAuth'
+import { useNuxtApp } from '#app'
 
 const { user } = useAuth()
+const nuxtApp = useNuxtApp()
 const isProfileMenuOpen = ref(false)
 const isFullscreen = ref(false)
+const userData = ref(null)
 
 const updateFullscreenStatus = () => {
   isFullscreen.value = !!document.fullscreenElement
@@ -86,7 +95,7 @@ const userInitials = computed(() => {
   if (!user.value?.name) return '?'
   return user.value.name
     .split(' ')
-    .map((word: string) => word[0])
+    .map(word => word[0])
     .join('')
     .toUpperCase()
 })
@@ -99,8 +108,22 @@ const closeProfileMenu = () => {
   isProfileMenuOpen.value = false
 }
 
+const fetchUserData = async () => {
+  try {
+    const response = await nuxtApp.$api.get('/api/v1/users/me')
+    userData.value = {
+      data: response.data,
+      message: response.message || '',
+      success: response.success
+    }
+  } catch (error) {
+    console.error('Failed to fetch user data:', error)
+  }
+}
+
 onMounted(() => {
   document.addEventListener('fullscreenchange', updateFullscreenStatus)
+  fetchUserData()
 })
 
 onUnmounted(() => {
