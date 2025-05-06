@@ -1,5 +1,23 @@
+type RequestKind = 
+  | 'employment'
+  | 'payroll_stamped'
+  | 'salary_deduction'
+  | 'introduction_letter'
+  | 'good_conduct_letter'
+  | 'confirmation_letter'
+  | 'embassy_letter'
+  | 'development_learning'
+  | string
+
+type RequestStatus = 
+  | 'pending'
+  | 'reviewed'
+  | 'accepted'
+  | 'rejected'
+  | string
+
 export default defineNuxtPlugin(() => {
-  const getRequestTypeText = (kind) => {
+  const getRequestTypeText = (kind: RequestKind): string => {
     switch (kind) {
       case 'employment':
         return 'اشتغال به کار'
@@ -22,7 +40,7 @@ export default defineNuxtPlugin(() => {
     }
   }
 
-  const getStatusClass = (status) => {
+  const getStatusClass = (status: RequestStatus): string => {
     switch (status) {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800'
@@ -37,7 +55,7 @@ export default defineNuxtPlugin(() => {
     }
   }
 
-  const getStatusText = (status) => {
+  const getStatusText = (status: RequestStatus): string => {
     switch (status) {
       case 'pending':
         return 'در انتظار بررسی'
