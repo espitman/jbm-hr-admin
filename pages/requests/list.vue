@@ -40,11 +40,11 @@
                 <div class="text-sm text-gray-900">{{ request.full_name }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ getRequestTypeText(request.kind) }}</div>
+                <div class="text-sm text-gray-900">{{ $request.getRequestTypeText(request.kind) }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getStatusClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                  {{ getStatusText(request.status) }}
+                <span :class="$request.getStatusClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                  {{ $request.getStatusText(request.status) }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
@@ -74,10 +74,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const { $request, $api } = useNuxtApp()
 const requests = ref([])
 const loading = ref(true)
 const error = ref(null)
-const { $api } = useNuxtApp()
 
 const fetchRequests = async () => {
   try {
@@ -89,57 +89,6 @@ const fetchRequests = async () => {
     error.value = err.message || 'خطا در دریافت اطلاعات درخواست‌ها'
   } finally {
     loading.value = false
-  }
-}
-
-const getStatusClass = (status) => {
-  switch (status) {
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'reviewed':
-      return 'bg-blue-100 text-blue-800'
-    case 'accepted':
-      return 'bg-green-100 text-green-800'
-    case 'rejected':
-      return 'bg-red-100 text-red-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
-
-const getStatusText = (status) => {
-  switch (status) {
-    case 'pending':
-      return 'در انتظار بررسی'
-    case 'reviewed':
-      return 'بررسی شده'
-    case 'accepted':
-      return 'تایید شده'
-    case 'rejected':
-      return 'رد شده'
-    default:
-      return status
-  }
-}
-
-const getRequestTypeText = (kind) => {
-  switch (kind) {
-    case 'employment':
-      return 'اشتغال به کار'
-    case 'payroll_stamped':
-      return 'فیش حقوقی مهر شده'
-    case 'salary_deduction':
-      return 'کسر از حقوق'
-    case 'introduction_letter':
-      return 'معرفی نامه'
-    case 'good_conduct_letter':
-      return 'نامه حسن انجام کار'
-    case 'confirmation_letter':
-      return 'نامه تاییدیه'
-    case 'embassy_letter':
-      return 'نامه سفارت'
-    default:
-      return kind
   }
 }
 

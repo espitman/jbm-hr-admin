@@ -116,12 +116,12 @@
                   </div>
                   <div>
                     <label class="block text-sm font-medium text-gray-500">نوع درخواست</label>
-                    <p class="mt-1 text-sm text-gray-900">{{ getRequestTypeText(request.kind) }}</p>
+                    <p class="mt-1 text-sm text-gray-900">{{ $request.getRequestTypeText(request.kind) }}</p>
                   </div>
                   <div>
                     <label class="block text-sm font-medium text-gray-500">وضعیت</label>
-                    <span :class="getStatusClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                      {{ getStatusText(request.status) }}
+                    <span :class="$request.getStatusClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                      {{ $request.getStatusText(request.status) }}
                     </span>
                   </div>
                 </div>
@@ -166,10 +166,10 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const { $request, $api } = useNuxtApp()
 const request = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const { $api } = useNuxtApp()
 
 const fetchRequest = async () => {
   try {
@@ -181,57 +181,6 @@ const fetchRequest = async () => {
     error.value = err.message || 'خطا در دریافت اطلاعات درخواست'
   } finally {
     loading.value = false
-  }
-}
-
-const getRequestTypeText = (kind) => {
-  switch (kind) {
-    case 'employment':
-      return 'اشتغال به کار'
-    case 'payroll_stamped':
-      return 'فیش حقوقی مهر شده'
-    case 'salary_deduction':
-      return 'کسر از حقوق'
-    case 'introduction_letter':
-      return 'معرفی نامه'
-    case 'good_conduct_letter':
-      return 'نامه حسن انجام کار'
-    case 'confirmation_letter':
-      return 'نامه تاییدیه'
-    case 'embassy_letter':
-      return 'نامه سفارت'
-    default:
-      return kind
-  }
-}
-
-const getStatusClass = (status) => {
-  switch (status) {
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'reviewed':
-      return 'bg-blue-100 text-blue-800'
-    case 'accepted':
-      return 'bg-green-100 text-green-800'
-    case 'rejected':
-      return 'bg-red-100 text-red-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
-
-const getStatusText = (status) => {
-  switch (status) {
-    case 'pending':
-      return 'در انتظار بررسی'
-    case 'reviewed':
-      return 'بررسی شده'
-    case 'accepted':
-      return 'تایید شده'
-    case 'rejected':
-      return 'رد شده'
-    default:
-      return status
   }
 }
 
