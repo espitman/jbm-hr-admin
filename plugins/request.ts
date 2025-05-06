@@ -7,6 +7,8 @@ type RequestKind =
   | 'confirmation_letter'
   | 'embassy_letter'
   | 'development_learning'
+  | 'childbirth_gift'
+  | 'marriage_gift'
   | string
 
 type RequestStatus = 
@@ -35,6 +37,10 @@ export default defineNuxtPlugin(() => {
         return 'نامه سفارت'
       case 'development_learning':
         return 'توسعه و یادگیری'
+      case 'childbirth_gift':
+        return 'هدیه تولد فرزند'
+      case 'marriage_gift':
+        return 'هدیه ازدواج'
       default:
         return kind
     }
@@ -81,7 +87,12 @@ export default defineNuxtPlugin(() => {
             manager_approval: 'تایید مدیر',
             hrbp_approval: 'تایید HRBP',
             course_invoice: 'فاکتور دوره',
-            payment_receipt: 'رسید پرداخت'
+            payment_receipt: 'رسید پرداخت',
+            travel_ticket: 'بلیط سفر',
+            travel_invoice: 'فاکتور سفر',
+            travel_receipt: 'رسید پرداخت سفر',
+            provider: 'سرویس',
+            credit_amount: 'مقدار به تومان'
           }
           return titles[key] || key
         }
