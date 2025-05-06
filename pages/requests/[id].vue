@@ -65,40 +65,6 @@
               </button>
             </div>
           </ContentBox>
-        </div>
-
-        <!-- Right Section (3/4) -->
-        <div class="col-span-3 space-y-6">
-          <!-- Request Details -->
-          <ContentBox title="اطلاعات درخواست">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <div class="space-y-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-500">نام و نام خانوادگی</label>
-                    <p class="mt-1 text-sm text-gray-900">{{ request.full_name }}</p>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-500">نوع درخواست</label>
-                    <p class="mt-1 text-sm text-gray-900">{{ getRequestTypeText(request.kind) }}</p>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-500">وضعیت</label>
-                    <span :class="getStatusClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                      {{ getStatusText(request.status) }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ContentBox>
-
-          <!-- Description -->
-          <ContentBox title="توضیحات">
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <p class="text-sm text-gray-900 whitespace-pre-line leading-loose font-extralight text-justify">{{ request.description }}</p>
-            </div>
-          </ContentBox>
 
           <!-- Status History -->
           <ContentBox title="تاریخچه وضعیت">
@@ -133,6 +99,60 @@
                   <p v-if="status.comment" class="mt-1 text-sm text-gray-600">{{ status.comment }}</p>
                 </div>
               </div>
+            </div>
+          </ContentBox>
+        </div>
+
+        <!-- Right Section (3/4) -->
+        <div class="col-span-3 space-y-6">
+          <!-- Request Details -->
+          <ContentBox title="اطلاعات درخواست">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-500">نام و نام خانوادگی</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ request.full_name }}</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-500">نوع درخواست</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ getRequestTypeText(request.kind) }}</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-500">وضعیت</label>
+                    <span :class="getStatusClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                      {{ getStatusText(request.status) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ContentBox>
+
+          <!-- Meta Information -->
+          <ContentBox v-if="request.meta && request.meta.length > 0" title="اطلاعات تکمیلی">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">کلید</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">مقدار</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="(item, index) in request.meta" :key="index">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.key }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ContentBox>
+
+          <!-- Description -->
+          <ContentBox title="توضیحات">
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <p class="text-sm text-gray-900 whitespace-pre-line leading-loose font-extralight text-justify">{{ request.description }}</p>
             </div>
           </ContentBox>
         </div>
