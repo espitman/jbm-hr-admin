@@ -75,7 +75,16 @@ export default defineNuxtPlugin(() => {
       request: {
         getRequestTypeText,
         getStatusClass,
-        getStatusText
+        getStatusText,
+        getDocumentTitle: (key: string): string => {
+          const titles: Record<string, string> = {
+            manager_approval: 'تایید مدیر',
+            hrbp_approval: 'تایید HRBP',
+            course_invoice: 'فاکتور دوره',
+            payment_receipt: 'رسید پرداخت'
+          }
+          return titles[key] || key
+        }
       }
     }
   }

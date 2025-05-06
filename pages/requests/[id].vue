@@ -131,7 +131,11 @@
 
           <!-- Meta Information -->
           <ContentBox v-if="request.meta && request.meta.length > 0" title="اطلاعات تکمیلی">
-            <div class="overflow-x-auto">
+            <DevelopmentLearningDocs
+              v-if="request.kind === 'development_learning'"
+              :meta="request.meta"
+            />
+            <div v-else class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                   <tr>
@@ -150,7 +154,7 @@
           </ContentBox>
 
           <!-- Description -->
-          <ContentBox title="توضیحات">
+          <ContentBox v-if="request.description && request.description.trim()" title="توضیحات">
             <div class="bg-gray-50 p-4 rounded-lg">
               <p class="text-sm text-gray-900 whitespace-pre-line leading-loose font-extralight text-justify">{{ request.description }}</p>
             </div>
@@ -164,6 +168,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import DevelopmentLearningDocs from '~/components/requests/DevelopmentLearningDocs.vue'
 
 const route = useRoute()
 const { $request, $api } = useNuxtApp()
