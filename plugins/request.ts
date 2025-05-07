@@ -9,6 +9,8 @@ type RequestKind =
   | 'development_learning'
   | 'childbirth_gift'
   | 'marriage_gift'
+  | 'travel_credit'
+  | 'supplementary_insurance'
   | string
 
 type RequestStatus = 
@@ -41,6 +43,10 @@ export default defineNuxtPlugin(() => {
         return 'هدیه تولد فرزند'
       case 'marriage_gift':
         return 'هدیه ازدواج'
+      case 'travel_credit':
+        return 'اعتبار سفر'
+      case 'supplementary_insurance':
+        return 'بیمه تکمیلی'
       default:
         return kind
     }
@@ -92,7 +98,19 @@ export default defineNuxtPlugin(() => {
             travel_invoice: 'فاکتور سفر',
             travel_receipt: 'رسید پرداخت سفر',
             provider: 'سرویس',
-            credit_amount: 'مقدار به تومان'
+            credit_amount: 'مقدار به تومان',
+            insurance_card: 'کارت بیمه',
+            insurance_invoice: 'فاکتور بیمه',
+            insurance_receipt: 'رسید پرداخت بیمه',
+            self: 'اطلاعات خود فرد',
+            spouse: 'اطلاعات همسر',
+            father: 'اطلاعات پدر',
+            mother: 'اطلاعات مادر',
+            child1: 'اطلاعات فرزند اول',
+            child2: 'اطلاعات فرزند دوم',
+            child3: 'اطلاعات فرزند سوم',
+            child4: 'اطلاعات فرزند چهارم',
+            child5: 'اطلاعات فرزند پنجم'
           }
           return titles[key] || key
         }

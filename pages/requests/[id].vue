@@ -139,6 +139,10 @@
               v-else-if="request.kind === 'travel_credit'"
               :meta="request.meta"
             />
+            <SupplementaryInsuranceDocs
+              v-else-if="request.kind === 'supplementary_insurance'"
+              :meta="request.meta"
+            />
             <div v-else class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead>
@@ -174,6 +178,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import DevelopmentLearningDocs from '~/components/requests/DevelopmentLearningDocs.vue'
 import TravelCreditDocs from '~/components/requests/TravelCreditDocs.vue'
+import SupplementaryInsuranceDocs from '~/components/requests/SupplementaryInsuranceDocs.vue'
 
 const route = useRoute()
 const { $request, $api } = useNuxtApp()
