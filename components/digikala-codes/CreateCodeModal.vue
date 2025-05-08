@@ -40,6 +40,7 @@
 <script setup>
 import { ref } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
+import { useToast } from 'vue-toastification'
 
 defineProps({
   isOpen: {
@@ -51,6 +52,7 @@ defineProps({
 const emit = defineEmits(['close', 'created'])
 
 const { $api } = useNuxtApp()
+const toast = useToast()
 const isCreating = ref(false)
 const newCode = ref({ code: '' })
 
@@ -62,10 +64,12 @@ const createCode = async () => {
   try {
     isCreating.value = true
     await $api.post('/api/v1/admin/digikala-codes', newCode.value)
+    toast.success('کد با موفقیت ایجاد شد')
     closeModal()
     emit('created')
     newCode.value = { code: '' }
   } catch (e) {
+    toast.error('خطا در ایجاد کد')
     console.error(e)
   } finally {
     isCreating.value = false
