@@ -67,24 +67,40 @@
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        v-model:current-page="currentPage"
+        :total-items="totalCount"
+        :per-page="perPage"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const { $request, $api } = useNuxtApp()
 const requests = ref([])
 const loading = ref(true)
 const error = ref(null)
+const currentPage = ref(1)
+const perPage = ref(10)
+const totalCount = ref(0)
 
 const fetchRequests = async () => {
   try {
     loading.value = true
     error.value = null
-    const response = await $api.get('/api/v1/admin/requests')
+    const response = await $api.get('/api/v1/admin/requests', {
+      page: currentPage.value,
+      page_size: perPage.value
+    })
     requests.value = response.data.items
+    totalCount.value = response.data.total
   } catch (err) {
     error.value = err.message || 'خطا در دریافت اطلاعات درخواست‌ها'
   } finally {
@@ -103,8 +119,35 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
-onMounted(() => {
-  fetchRequests()
+// Watch for route query changes
+watch(
+  () => route.query.page,
+  async (newPage) => {
+    if (newPage) {
+      const page = parseInt(newPage)
+      if (page !== currentPage.value) {
+        currentPage.value = page
+        await fetchRequests()
+      }
+    }
+  }
+)
+
+// Watch for currentPage changes
+watch(
+  () => currentPage.value,
+  async (newPage) => {
+    await router.push({ query: { ...route.query, page: newPage } })
+    await fetchRequests()
+  }
+)
+
+onMounted(async () => {
+  // Initialize page from URL if available
+  if (route.query.page) {
+    currentPage.value = parseInt(route.query.page)
+  }
+  await fetchRequests()
 })
 </script>
 
