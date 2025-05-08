@@ -51,26 +51,40 @@
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        v-model:current-page="currentPage"
+        :total-items="total"
+        :per-page="perPage"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import CreateCodeModal from '@/components/digikala-codes/CreateCodeModal.vue'
+import Pagination from '@/components/Pagination.vue'
 
 const { $api } = useNuxtApp()
+const route = useRoute()
+const router = useRouter()
 const codes = ref([])
 const loading = ref(true)
 const error = ref(null)
 const showCreateModal = ref(false)
+const currentPage = ref(1)
+const total = ref(0)
+const perPage = 10
 
-const fetchCodes = async () => {
+const fetchCodes = async (page = 1) => {
   try {
     loading.value = true
     error.value = null
-    const res = await $api.get('/api/v1/admin/digikala-codes')
+    const res = await $api.get(`/api/v1/admin/digikala-codes?page=${page}`)
     codes.value = res.data.items || []
+    total.value = res.data.total
+    currentPage.value = page
   } catch (e) {
     error.value = e.message || 'خطا در دریافت کدها'
   } finally {
@@ -89,5 +103,30 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
-onMounted(fetchCodes)
+// Watch for route query changes
+watch(
+  () => route.query,
+  async (newQuery) => {
+    if (newQuery.page) {
+      currentPage.value = parseInt(newQuery.page)
+    } else {
+      currentPage.value = 1
+    }
+    await fetchCodes(currentPage.value)
+  },
+  { immediate: true }
+)
+
+// When currentPage changes, update the route query
+watch(
+  () => currentPage.value,
+  (newPage) => {
+    const query = { ...route.query, page: newPage }
+    router.push({ query })
+  }
+)
+
+onMounted(() => {
+  // Initial page will be set by the route query watcher
+})
 </script> 
