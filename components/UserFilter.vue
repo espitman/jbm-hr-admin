@@ -2,12 +2,12 @@
   <div class="relative">
     <input
       v-model="query"
-      @focus="showDropdown = true"
-      @input="onInput"
+      class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full text-sm"
       type="text"
       :placeholder="placeholder"
-      class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full text-sm"
-    />
+      @focus="showDropdown = true"
+      @input="onInput"
+    >
     <ul
       v-if="showDropdown && (results.length > 0 || loading)"
       class="absolute z-10 left-0 right-0 bg-white border border-gray-200 rounded-lg mt-1 shadow-lg max-h-60 overflow-auto"
@@ -22,15 +22,15 @@
       <li
         v-for="user in results"
         :key="user.id"
-        @mousedown.prevent="selectUser(user)"
         class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-purple-50"
+        @mousedown.prevent="selectUser(user)"
       >
         <img
           v-if="user.avatar"
           :src="user.avatar"
           class="w-8 h-8 rounded-full object-cover border border-gray-200"
           alt="avatar"
-        />
+        >
         <div v-else class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500">
           <span>{{ user.full_name?.slice(0, 1) }}</span>
         </div>

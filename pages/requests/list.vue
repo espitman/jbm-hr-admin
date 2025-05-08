@@ -9,15 +9,15 @@
       :status="filters.status"
       :user-id="filters.userId"
       :kinds="$request.getRequestKinds()"
+      :default-user-id="defaultUserId"
       @update:kind="val => filters.kind = val"
       @update:status="val => filters.status = val"
-      @update:userId="val => filters.userId = val"
+      @update:user-id="val => filters.userId = val"
       @clear="clearFilters"
-      :default-user-id="defaultUserId"
     />
 
     <div v-if="loading" class="flex justify-center items-center py-8">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"/>
     </div>
 
     <div v-else-if="error" class="text-center text-red-500">
@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Filters from '~/components/requests/Filters.vue'
 

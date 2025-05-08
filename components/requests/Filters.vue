@@ -32,8 +32,8 @@
       <label class="text-sm font-medium text-gray-700 mb-1">شناسه کاربر</label>
       <UserFilter
         :placeholder="'نام، ایمیل یا شماره کاربر را جستجو کنید'"
-        @select="user => emit('update:userId', user?.id || '')"
         :default-user-id="defaultUserId"
+        @select="user => emit('update:userId', user?.id || '')"
       />
     </div>
 
