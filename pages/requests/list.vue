@@ -113,6 +113,7 @@ const filters = ref({
 const defaultUserId = computed(() => route.query.user_id || '')
 
 const fetchRequests = async () => {
+  console.log('filters', filters.value)
   try {
     loading.value = true
     error.value = null
@@ -146,65 +147,42 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
-// Watch for filter changes
-watch(
-  () => filters.value.kind,
-  async (newKind) => {
-    const query = { ...route.query, page: 1 }
-    if (newKind) query.kind = newKind
-    else delete query.kind
-    await router.push({ query })
-    await fetchRequests()
-  }
-)
-
-watch(
-  () => filters.value.status,
-  async (newStatus) => {
-    const query = { ...route.query, page: 1 }
-    if (newStatus) query.status = newStatus
-    else delete query.status
-    await router.push({ query })
-    await fetchRequests()
-  }
-)
-
-watch(
-  () => filters.value.userId,
-  async (newUserId) => {
-    const query = { ...route.query, page: 1 }
-    if (newUserId) query.user_id = newUserId
-    else delete query.user_id
-    await router.push({ query })
-    await fetchRequests()
-  }
-)
-
 // Watch for route query changes
 watch(
   () => route.query,
   async (newQuery) => {
-    if (newQuery.page) {
-      const page = parseInt(newQuery.page)
-      if (page !== currentPage.value) {
-        currentPage.value = page
-      }
-    }
+    // Update filters from query
     filters.value.kind = newQuery.kind || ''
     filters.value.status = newQuery.status || ''
     filters.value.userId = newQuery.user_id || ''
+    if (newQuery.page) {
+      currentPage.value = parseInt(newQuery.page)
+    } else {
+      currentPage.value = 1
+    }
     await fetchRequests()
   },
-  { deep: true }
+  { immediate: true }
 )
 
-// Watch for currentPage changes
+// When filters change, update the route query (do not call fetchRequests directly)
+watch(
+  () => [filters.value.kind, filters.value.status, filters.value.userId],
+  ([kind, status, userId]) => {
+    const query = { ...route.query, page: 1 }
+    if (kind) query.kind = kind; else delete query.kind
+    if (status) query.status = status; else delete query.status
+    if (userId) query.user_id = userId; else delete query.user_id
+    router.push({ query })
+  }
+)
+
+// When currentPage changes, update the route query (do not call fetchRequests directly)
 watch(
   () => currentPage.value,
-  async (newPage) => {
+  (newPage) => {
     const query = { ...route.query, page: newPage }
-    await router.push({ query })
-    await fetchRequests()
+    router.push({ query })
   }
 )
 
@@ -213,17 +191,6 @@ const clearFilters = () => {
   filters.value.status = ''
   filters.value.userId = ''
 }
-
-onMounted(async () => {
-  // Initialize filters and page from URL if available
-  if (route.query.page) {
-    currentPage.value = parseInt(route.query.page)
-  }
-  if (route.query.kind) filters.value.kind = route.query.kind
-  if (route.query.status) filters.value.status = route.query.status
-  if (route.query.user_id) filters.value.userId = route.query.user_id
-  await fetchRequests()
-})
 </script>
 
 <style>
