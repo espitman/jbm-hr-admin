@@ -4,43 +4,16 @@
       <h1 class="text-xl font-bold text-purple-700">درخواست‌ها</h1>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="flex flex-col">
-        <label class="text-sm font-medium text-gray-700 mb-1">نوع درخواست</label>
-        <select
-          v-model="filters.kind"
-          class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full"
-        >
-          <option value="" class="text-gray-400">همه انواع</option>
-          <option v-for="kind in $request.getRequestKinds()" :key="kind.value" :value="kind.value">
-            {{ kind.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="flex flex-col">
-        <label class="text-sm font-medium text-gray-700 mb-1">وضعیت</label>
-        <select
-          v-model="filters.status"
-          class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full"
-        >
-          <option value="" class="text-gray-400">همه وضعیت‌ها</option>
-          <option value="pending">در انتظار بررسی</option>
-          <option value="approved">تایید شده</option>
-          <option value="rejected">رد شده</option>
-        </select>
-      </div>
-
-      <div class="flex flex-col">
-        <label class="text-sm font-medium text-gray-700 mb-1">شناسه کاربر</label>
-        <input
-          v-model="filters.userId"
-          type="text"
-          placeholder="شناسه کاربر را وارد کنید"
-          class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full"
-        />
-      </div>
-    </div>
+    <Filters
+      :kind="filters.kind"
+      :status="filters.status"
+      :user-id="filters.userId"
+      :kinds="$request.getRequestKinds()"
+      @update:kind="val => filters.kind = val"
+      @update:status="val => filters.status = val"
+      @update:userId="val => filters.userId = val"
+      @clear="clearFilters"
+    />
 
     <div v-if="loading" class="flex justify-center items-center py-8">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -118,6 +91,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Filters from '~/components/requests/Filters.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -230,6 +204,12 @@ watch(
     await fetchRequests()
   }
 )
+
+const clearFilters = () => {
+  filters.value.kind = ''
+  filters.value.status = ''
+  filters.value.userId = ''
+}
 
 onMounted(async () => {
   // Initialize filters and page from URL if available
