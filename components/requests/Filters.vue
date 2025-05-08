@@ -30,12 +30,9 @@
 
     <div class="flex flex-col">
       <label class="text-sm font-medium text-gray-700 mb-1">شناسه کاربر</label>
-      <input
-        :value="userId"
-        class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full text-sm"
-        type="text"
-        placeholder="شناسه کاربر را وارد کنید"
-        @input="$emit('update:userId', $event.target.value)"
+      <UserFilter
+        :placeholder="'نام، ایمیل یا شماره کاربر را جستجو کنید'"
+        @select="user => emit('update:userId', user?.id || '')"
       />
     </div>
 
@@ -58,6 +55,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import UserFilter from '~/components/UserFilter.vue'
 
 const props = defineProps({
   kind: {
@@ -77,6 +75,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['update:kind', 'update:status', 'update:userId', 'clear'])
 
 const showClear = computed(() => !!(props.kind || props.status || props.userId))
 </script> 
