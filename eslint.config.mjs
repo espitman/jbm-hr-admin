@@ -7,6 +7,7 @@ export default withNuxt(
     rules: {
       'Require self-closing': 'off',
       "vue/attributes-order": "off",
+      'vue/html-self-closing': 'off',
     },
   }
 )
