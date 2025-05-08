@@ -2,7 +2,19 @@
   <div class="container mx-auto p-4">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-xl font-bold text-purple-700">کدهای دیجی‌کالا</h1>
+      <button
+        @click="showCreateModal = true"
+        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200"
+      >
+        ایجاد کد جدید
+      </button>
     </div>
+
+    <CreateCodeModal
+      :is-open="showCreateModal"
+      @close="showCreateModal = false"
+      @created="fetchCodes"
+    />
 
     <div v-if="loading" class="flex justify-center items-center py-8">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -45,10 +57,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import CreateCodeModal from '@/components/digikala-codes/CreateCodeModal.vue'
+
 const { $api } = useNuxtApp()
 const codes = ref([])
 const loading = ref(true)
 const error = ref(null)
+const showCreateModal = ref(false)
 
 const fetchCodes = async () => {
   try {
