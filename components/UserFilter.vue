@@ -46,7 +46,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-const { placeholder, selectedUser } = defineProps({
+const { placeholder, selectedUser, defaultUserId } = defineProps({
   placeholder: {
     type: String,
     default: 'جستجوی کاربر...'
@@ -54,6 +54,10 @@ const { placeholder, selectedUser } = defineProps({
   selectedUser: {
     type: Object,
     default: null
+  },
+  defaultUserId: {
+    type: [String, Number],
+    default: ''
   }
 })
 const emit = defineEmits(['select'])
@@ -69,6 +73,24 @@ watch(() => selectedUser, (val) => {
     query.value = val.full_name
   } else {
     query.value = ''
+  }
+}, { immediate: true })
+
+watch(() => defaultUserId, async (id) => {
+  if (!id) {
+    query.value = ''
+    emit('select', null)
+    return
+  }
+  try {
+    const res = await $api.get(`/api/v1/admin/users/${id}`)
+    if (res.data) {
+      query.value = res.data.first_name + ' ' + res.data.last_name
+      emit('select', res.data)
+    }
+  } catch {
+    query.value = ''
+    emit('select', null)
   }
 }, { immediate: true })
 

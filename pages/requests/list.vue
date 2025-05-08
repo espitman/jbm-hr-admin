@@ -13,6 +13,7 @@
       @update:status="val => filters.status = val"
       @update:userId="val => filters.userId = val"
       @clear="clearFilters"
+      :default-user-id="defaultUserId"
     />
 
     <div v-if="loading" class="flex justify-center items-center py-8">
@@ -89,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Filters from '~/components/requests/Filters.vue'
 
@@ -108,6 +109,8 @@ const filters = ref({
   status: '',
   userId: ''
 })
+
+const defaultUserId = computed(() => route.query.user_id || '')
 
 const fetchRequests = async () => {
   try {

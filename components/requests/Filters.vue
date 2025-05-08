@@ -33,6 +33,7 @@
       <UserFilter
         :placeholder="'نام، ایمیل یا شماره کاربر را جستجو کنید'"
         @select="user => emit('update:userId', user?.id || '')"
+        :default-user-id="defaultUserId"
       />
     </div>
 
@@ -73,6 +74,10 @@ const props = defineProps({
   kinds: {
     type: Array,
     required: true
+  },
+  defaultUserId: {
+    type: String,
+    default: ''
   }
 })
 
