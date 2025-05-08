@@ -1,17 +1,19 @@
-type RequestKind = 
-  | 'employment'
-  | 'payroll_stamped'
-  | 'salary_deduction'
-  | 'introduction_letter'
-  | 'good_conduct_letter'
-  | 'confirmation_letter'
-  | 'embassy_letter'
-  | 'development_learning'
-  | 'childbirth_gift'
-  | 'marriage_gift'
-  | 'travel_credit'
-  | 'supplementary_insurance'
-  | string
+const requestKindValues = [
+  'employment',
+  'payroll_stamped',
+  'salary_deduction',
+  'introduction_letter',
+  'good_conduct_letter',
+  'confirmation_letter',
+  'embassy_letter',
+  'development_learning',
+  'childbirth_gift',
+  'marriage_gift',
+  'travel_credit',
+  'supplementary_insurance'
+] as const
+
+type RequestKind = typeof requestKindValues[number] | string
 
 type RequestStatus = 
   | 'pending'
@@ -50,6 +52,13 @@ export default defineNuxtPlugin(() => {
       default:
         return kind
     }
+  }
+
+  const getRequestKinds = () => {
+    return requestKindValues.map(value => ({
+      value,
+      label: getRequestTypeText(value)
+    }))
   }
 
   const getStatusClass = (status: RequestStatus): string => {
@@ -113,7 +122,8 @@ export default defineNuxtPlugin(() => {
             child5: 'اطلاعات فرزند پنجم'
           }
           return titles[key] || key
-        }
+        },
+        getRequestKinds
       }
     }
   }

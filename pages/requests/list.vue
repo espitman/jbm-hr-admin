@@ -4,6 +4,44 @@
       <h1 class="text-xl font-bold text-purple-700">درخواست‌ها</h1>
     </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">نوع درخواست</label>
+        <select
+          v-model="filters.kind"
+          class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full"
+        >
+          <option value="" class="text-gray-400">همه انواع</option>
+          <option v-for="kind in $request.getRequestKinds()" :key="kind.value" :value="kind.value">
+            {{ kind.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">وضعیت</label>
+        <select
+          v-model="filters.status"
+          class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full"
+        >
+          <option value="" class="text-gray-400">همه وضعیت‌ها</option>
+          <option value="pending">در انتظار بررسی</option>
+          <option value="approved">تایید شده</option>
+          <option value="rejected">رد شده</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">شناسه کاربر</label>
+        <input
+          v-model="filters.userId"
+          type="text"
+          placeholder="شناسه کاربر را وارد کنید"
+          class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-300 transition w-full"
+        />
+      </div>
+    </div>
+
     <div v-if="loading" class="flex justify-center items-center py-8">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
     </div>
@@ -91,14 +129,26 @@ const currentPage = ref(1)
 const perPage = ref(10)
 const totalCount = ref(0)
 
+const filters = ref({
+  kind: '',
+  status: '',
+  userId: ''
+})
+
 const fetchRequests = async () => {
   try {
     loading.value = true
     error.value = null
-    const response = await $api.get('/api/v1/admin/requests', {
+    const params = {
       page: currentPage.value,
       page_size: perPage.value
-    })
+    }
+
+    if (filters.value.kind) params.kind = filters.value.kind
+    if (filters.value.status) params.status = filters.value.status
+    if (filters.value.userId) params.user_id = filters.value.userId
+
+    const response = await $api.get('/api/v1/admin/requests', params)
     requests.value = response.data.items
     totalCount.value = response.data.total
   } catch (err) {
@@ -119,34 +169,76 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
+// Watch for filter changes
+watch(
+  () => filters.value.kind,
+  async (newKind) => {
+    const query = { ...route.query, page: 1 }
+    if (newKind) query.kind = newKind
+    else delete query.kind
+    await router.push({ query })
+    await fetchRequests()
+  }
+)
+
+watch(
+  () => filters.value.status,
+  async (newStatus) => {
+    const query = { ...route.query, page: 1 }
+    if (newStatus) query.status = newStatus
+    else delete query.status
+    await router.push({ query })
+    await fetchRequests()
+  }
+)
+
+watch(
+  () => filters.value.userId,
+  async (newUserId) => {
+    const query = { ...route.query, page: 1 }
+    if (newUserId) query.user_id = newUserId
+    else delete query.user_id
+    await router.push({ query })
+    await fetchRequests()
+  }
+)
+
 // Watch for route query changes
 watch(
-  () => route.query.page,
-  async (newPage) => {
-    if (newPage) {
-      const page = parseInt(newPage)
+  () => route.query,
+  async (newQuery) => {
+    if (newQuery.page) {
+      const page = parseInt(newQuery.page)
       if (page !== currentPage.value) {
         currentPage.value = page
-        await fetchRequests()
       }
     }
-  }
+    filters.value.kind = newQuery.kind || ''
+    filters.value.status = newQuery.status || ''
+    filters.value.userId = newQuery.user_id || ''
+    await fetchRequests()
+  },
+  { deep: true }
 )
 
 // Watch for currentPage changes
 watch(
   () => currentPage.value,
   async (newPage) => {
-    await router.push({ query: { ...route.query, page: newPage } })
+    const query = { ...route.query, page: newPage }
+    await router.push({ query })
     await fetchRequests()
   }
 )
 
 onMounted(async () => {
-  // Initialize page from URL if available
+  // Initialize filters and page from URL if available
   if (route.query.page) {
     currentPage.value = parseInt(route.query.page)
   }
+  if (route.query.kind) filters.value.kind = route.query.kind
+  if (route.query.status) filters.value.status = route.query.status
+  if (route.query.user_id) filters.value.userId = route.query.user_id
   await fetchRequests()
 })
 </script>
