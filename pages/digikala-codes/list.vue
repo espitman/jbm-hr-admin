@@ -44,8 +44,8 @@
                   {{ code.used ? 'استفاده شده' : 'فعال' }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(code.created_at) }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ code.assign_at ? formatDate(code.assign_at) : '-' }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $formatDate(code.created_at) }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ code.assign_at ? $formatDate(code.assign_at) : '-' }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ code.assigned_to_user?.full_name || '-' }}</td>
             </tr>
           </tbody>
@@ -66,7 +66,7 @@ import { ref, onMounted, watch } from 'vue'
 import CreateCodeModal from '@/components/digikala-codes/CreateCodeModal.vue'
 import Pagination from '@/components/Pagination.vue'
 
-const { $api } = useNuxtApp()
+const { $api, $formatDate } = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
 const codes = ref([])
@@ -90,17 +90,6 @@ const fetchCodes = async (page = 1) => {
   } finally {
     loading.value = false
   }
-}
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('fa-IR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
 }
 
 // Watch for route query changes

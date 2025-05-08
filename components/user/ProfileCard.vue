@@ -22,7 +22,7 @@
       <div class="flex justify-between items-center">
         <span class="text-gray-500">تاریخ تولد:</span>
         <div class="flex items-center gap-2">
-          <span class="text-gray-900">{{ formatDate(birthdate) }}</span>
+          <span class="text-gray-900">{{ $formatDateOnly(birthdate) }}</span>
           <button @click="openDateModal('birthdate')" class="text-purple-600 hover:text-purple-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -33,7 +33,7 @@
       <div class="flex justify-between items-center">
         <span class="text-gray-500">تاریخ شروع همکاری:</span>
         <div class="flex items-center gap-2">
-          <span class="text-gray-900">{{ formatDate(cooperation_start_date) }}</span>
+          <span class="text-gray-900">{{ $formatDateOnly(cooperation_start_date) }}</span>
           <button @click="openDateModal('cooperation_start_date')" class="text-purple-600 hover:text-purple-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -112,7 +112,7 @@ import { useToast } from 'vue-toastification'
 import { useNuxtApp } from '#app'
 import DatePicker from 'vue3-persian-datetime-picker'
 
-const { $api } = useNuxtApp()
+const { $api, $formatDateOnly } = useNuxtApp()
 const props = defineProps({
   avatar: {
     type: String,
@@ -151,11 +151,6 @@ const isDateUpdating = ref(false)
 const dateModalTitle = computed(() => {
   return editingField.value === 'birthdate' ? 'تغییر تاریخ تولد' : 'تغییر تاریخ شروع همکاری'
 })
-
-const formatDate = (date) => {
-  if (!date) return '-'
-  return new Date(date).toLocaleDateString('fa-IR')
-}
 
 const openUploadModal = () => {
   isUploadModalOpen.value = true

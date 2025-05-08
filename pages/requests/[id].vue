@@ -46,7 +46,7 @@
           <ContentBox v-if="request.status === 'pending'" title="تغییر وضعیت">
             <div class="flex flex-col space-y-3">
               <button
-                @click="updateStatus('accepted')"
+                @click="showApproveModal = true"
                 class="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@
                 <span>تایید</span>
               </button>
               <button
-                @click="updateStatus('rejected')"
+                @click="showRejectModal = true"
                 class="flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@
                 </div>
                 <div class="mr-3">
                   <p class="text-sm font-medium text-gray-900">ایجاد درخواست</p>
-                  <p class="text-sm text-gray-500">{{ formatDate(request.created_at) }}</p>
+                  <p class="text-sm text-gray-500">{{ $formatDate(request.created_at) }}</p>
                 </div>
               </div>
               <div v-for="(status, index) in request.status_history" :key="index" class="flex items-start">
@@ -95,7 +95,7 @@
                 </div>
                 <div class="mr-3">
                   <p class="text-sm font-medium text-gray-900">{{ getStatusText(status.status) }}</p>
-                  <p class="text-sm text-gray-500">{{ formatDate(status.created_at) }}</p>
+                  <p class="text-sm text-gray-500">{{ $formatDate(status.created_at) }}</p>
                   <p v-if="status.comment" class="mt-1 text-sm text-gray-600">{{ status.comment }}</p>
                 </div>
               </div>
@@ -170,6 +170,55 @@
         </div>
       </div>
     </div>
+
+    <!-- Reject Modal -->
+    <div v-if="showRejectModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg">
+        <h2 class="text-xl font-bold mb-4">دلیل رد درخواست</h2>
+        <textarea
+          v-model="rejectReason"
+          class="w-full h-32 p-2 border border-gray-300 rounded-lg"
+          placeholder="دلیل رد درخواست را وارد کنید"
+        ></textarea>
+        <div class="mt-4 space-x-2">
+          <button
+            @click="showRejectModal = false"
+            class="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg hover:bg-gray-300"
+          >
+            انصراف
+          </button>
+          <button
+            @click="rejectRequest"
+            :disabled="isSubmitting"
+            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            {{ isSubmitting ? 'در حال ثبت...' : 'تایید' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Approve Modal -->
+    <div v-if="showApproveModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg">
+        <h2 class="text-xl font-bold mb-4">تایید درخواست</h2>
+        <div class="mt-4 space-x-2">
+          <button
+            @click="showApproveModal = false"
+            class="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg hover:bg-gray-300"
+          >
+            انصراف
+          </button>
+          <button
+            @click="approveRequest"
+            :disabled="isSubmitting"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            {{ isSubmitting ? 'در حال ثبت...' : 'تایید' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -180,53 +229,89 @@ import DevelopmentLearningDocs from '~/components/requests/DevelopmentLearningDo
 import TravelCreditDocs from '~/components/requests/TravelCreditDocs.vue'
 import SupplementaryInsuranceDocs from '~/components/requests/SupplementaryInsuranceDocs.vue'
 
+const { $request, $api, $formatDate } = useNuxtApp()
 const route = useRoute()
-const { $request, $api } = useNuxtApp()
 const request = ref(null)
 const loading = ref(true)
 const error = ref(null)
+const showRejectModal = ref(false)
+const showApproveModal = ref(false)
+const rejectReason = ref('')
+const isSubmitting = ref(false)
 
 const fetchRequest = async () => {
   try {
     loading.value = true
     error.value = null
-    const response = await $api.get(`/api/v1/admin/requests/${route.params.id}`)
-    request.value = response.data
-  } catch (err) {
-    error.value = err.message || 'خطا در دریافت اطلاعات درخواست'
+    const res = await $api.get(`/api/v1/admin/requests/${route.params.id}`)
+    request.value = res.data
+  } catch (e) {
+    error.value = e.message || 'خطا در دریافت اطلاعات درخواست'
   } finally {
     loading.value = false
   }
 }
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('fa-IR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
-}
+const rejectRequest = async () => {
+  if (!rejectReason.value) {
+    return
+  }
 
-const updateStatus = async (newStatus) => {
   try {
-    loading.value = true
-    await $api.patch(`/api/v1/admin/requests/${route.params.id}/status`, {
-      status: newStatus
+    isSubmitting.value = true
+    await $api.post(`/api/v1/admin/requests/${route.params.id}/reject`, {
+      reason: rejectReason.value
     })
+    showRejectModal.value = false
+    rejectReason.value = ''
     await fetchRequest()
-  } catch (err) {
-    error.value = err.message || 'خطا در بروزرسانی وضعیت'
+  } catch (e) {
+    error.value = e.message || 'خطا در رد درخواست'
   } finally {
-    loading.value = false
+    isSubmitting.value = false
   }
 }
 
-onMounted(() => {
-  fetchRequest()
-})
+const approveRequest = async () => {
+  try {
+    isSubmitting.value = true
+    await $api.post(`/api/v1/admin/requests/${route.params.id}/approve`)
+    showApproveModal.value = false
+    await fetchRequest()
+  } catch (e) {
+    error.value = e.message || 'خطا در تایید درخواست'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+const getStatusClass = (status) => {
+  switch (status) {
+    case 'pending':
+      return 'bg-yellow-100 text-yellow-800'
+    case 'approved':
+      return 'bg-green-100 text-green-800'
+    case 'rejected':
+      return 'bg-red-100 text-red-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+const getStatusText = (status) => {
+  switch (status) {
+    case 'pending':
+      return 'در انتظار بررسی'
+    case 'approved':
+      return 'تایید شده'
+    case 'rejected':
+      return 'رد شده'
+    default:
+      return status
+  }
+}
+
+onMounted(() => fetchRequest())
 </script>
 
 <style>

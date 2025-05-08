@@ -60,7 +60,7 @@
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ formatDate(request.created_at) }}</div>
+                <div class="text-sm text-gray-900">{{ $formatDate(request.created_at) }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <NuxtLink
@@ -94,9 +94,9 @@ import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Filters from '~/components/requests/Filters.vue'
 
+const { $request, $api, $formatDate } = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
-const { $request, $api } = useNuxtApp()
 const requests = ref([])
 const loading = ref(true)
 const error = ref(null)
@@ -134,17 +134,6 @@ const fetchRequests = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('fa-IR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
 }
 
 // Watch for route query changes

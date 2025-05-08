@@ -69,8 +69,8 @@
                   </div>
                 </NuxtLink>
                 <button
-                  @click="downloadResume(resume)"
                   class="text-green-600 hover:text-green-900 cursor-pointer"
+                  @click="downloadResume(resume)"
                 >
                   <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,19 +88,39 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
+const { $api, $formatDate } = useNuxtApp()
+const route = useRoute()
+const router = useRouter()
 const resumes = ref([])
 const loading = ref(true)
 const error = ref(null)
-const { $api } = useNuxtApp()
+const currentPage = ref(1)
+const perPage = ref(10)
+const totalCount = ref(0)
+
+const filters = ref({
+  status: '',
+  userId: ''
+})
 
 const fetchResumes = async () => {
   try {
     loading.value = true
     error.value = null
-    const response = await $api.get('/api/v1/admin/resumes')
+    const params = {
+      page: currentPage.value,
+      page_size: perPage.value
+    }
+
+    if (filters.value.status) params.status = filters.value.status
+    if (filters.value.userId) params.user_id = filters.value.userId
+
+    const response = await $api.get('/api/v1/admin/resumes', params)
     resumes.value = response.data.items
+    totalCount.value = response.data.total
   } catch (err) {
     error.value = err.message || 'خطا در دریافت اطلاعات رزومه‌ها'
   } finally {
@@ -108,13 +128,48 @@ const fetchResumes = async () => {
   }
 }
 
+// Watch for route query changes
+watch(
+  () => route.query,
+  async (newQuery) => {
+    // Update filters from query
+    filters.value.status = newQuery.status || ''
+    filters.value.userId = newQuery.user_id || ''
+    if (newQuery.page) {
+      currentPage.value = parseInt(newQuery.page)
+    } else {
+      currentPage.value = 1
+    }
+    await fetchResumes()
+  },
+  { immediate: true }
+)
+
+// When filters change, update the route query (do not call fetchResumes directly)
+watch(
+  () => [filters.value.status, filters.value.userId],
+  ([status, userId]) => {
+    const query = { ...route.query, page: 1 }
+    if (status) query.status = status; else delete query.status
+    if (userId) query.user_id = userId; else delete query.user_id
+    router.push({ query })
+  }
+)
+
+// When currentPage changes, update the route query (do not call fetchResumes directly)
+watch(
+  () => currentPage.value,
+  (newPage) => {
+    const query = { ...route.query, page: newPage }
+    router.push({ query })
+  }
+)
+
 const getStatusClass = (status) => {
   switch (status) {
     case 'pending':
       return 'bg-yellow-100 text-yellow-800'
-    case 'reviewed':
-      return 'bg-blue-100 text-blue-800'
-    case 'accepted':
+    case 'approved':
       return 'bg-green-100 text-green-800'
     case 'rejected':
       return 'bg-red-100 text-red-800'
@@ -127,9 +182,7 @@ const getStatusText = (status) => {
   switch (status) {
     case 'pending':
       return 'در انتظار بررسی'
-    case 'reviewed':
-      return 'بررسی شده'
-    case 'accepted':
+    case 'approved':
       return 'تایید شده'
     case 'rejected':
       return 'رد شده'
@@ -140,13 +193,7 @@ const getStatusText = (status) => {
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
-  return new Intl.DateTimeFormat('fa-IR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
+  return $formatDate(date)
 }
 
 const downloadResume = async (resume) => {

@@ -144,12 +144,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useNuxtApp } from '#app'
 
+const { $api, $formatDate } = useNuxtApp()
 const route = useRoute()
 const resume = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const { $api } = useNuxtApp()
 const pdfUrl = ref(null)
 const loadingPdf = ref(false)
 
@@ -157,10 +158,10 @@ const fetchResume = async () => {
   try {
     loading.value = true
     error.value = null
-    const response = await $api.get(`/api/v1/admin/resumes/${route.params.id}`)
-    resume.value = response.data
-  } catch (err) {
-    error.value = err.message || 'خطا در دریافت اطلاعات رزومه'
+    const res = await $api.get(`/api/v1/admin/resumes/${route.params.id}`)
+    resume.value = res.data
+  } catch (e) {
+    error.value = e.message || 'خطا در دریافت اطلاعات رزومه'
   } finally {
     loading.value = false
   }
@@ -198,13 +199,7 @@ const getStatusText = (status) => {
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
-  return new Intl.DateTimeFormat('fa-IR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
+  return $formatDate(date)
 }
 
 const viewResume = async () => {
@@ -240,9 +235,7 @@ const downloadResume = async () => {
   }
 }
 
-onMounted(() => {
-  fetchResume()
-})
+onMounted(() => fetchResume())
 </script>
 
 <style>
