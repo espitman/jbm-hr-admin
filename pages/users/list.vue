@@ -199,6 +199,7 @@ const departments = ref([])
 
 // Filters
 const filters = ref({
+  full_name: '',
   personnel_number: '',
   national_code: '',
   phone: '',
@@ -273,6 +274,7 @@ const handleSearch = (newFilters) => {
 const handleClear = () => {
   // Clear filters
   filters.value = {
+    full_name: '',
     personnel_number: '',
     national_code: '',
     phone: '',
@@ -314,6 +316,7 @@ watch(
   (newQuery) => {
     // Update filters from URL, only including non-empty values
     filters.value = {
+      full_name: newQuery.full_name || '',
       personnel_number: newQuery.personnel_number || '',
       national_code: newQuery.national_code || '',
       phone: newQuery.phone || '',
@@ -327,10 +330,8 @@ watch(
       currentPage.value = page
     }
     
-    // Only fetch data if the change came from URL (not from button clicks)
-    if (!newQuery._fromButton) {
-      fetchUsers()
-    }
+    // Always fetch data on route change or page refresh
+    fetchUsers()
   },
   { immediate: true, deep: true }
 )

@@ -1,6 +1,19 @@
 <template>
   <div class="bg-white rounded-lg shadow p-6 mb-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Full Name -->
+      <div>
+        <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
+        <input
+          id="full_name"
+          v-model="tempFilters.full_name"
+          type="text"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          placeholder="نام و نام خانوادگی را وارد کنید"
+          @keyup.enter="handleSearch"
+        >
+      </div>
+
       <!-- Personnel Number -->
       <div>
         <label for="personnel_number" class="block text-sm font-medium text-gray-700 mb-1">شماره پرسنلی</label>
@@ -9,6 +22,7 @@
           v-model="tempFilters.personnel_number"
           type="text"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          @keyup.enter="handleSearch"
         />
       </div>
 
@@ -20,6 +34,7 @@
           v-model="tempFilters.national_code"
           type="text"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          @keyup.enter="handleSearch"
         />
       </div>
 
@@ -31,6 +46,7 @@
           v-model="tempFilters.phone"
           type="text"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          @keyup.enter="handleSearch"
         />
       </div>
 
@@ -41,6 +57,7 @@
           id="role"
           v-model="tempFilters.role"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          @keyup.enter="handleSearch"
         >
           <option value="">همه</option>
           <option value="admin">مدیر</option>
@@ -55,6 +72,7 @@
           id="department_id"
           v-model="tempFilters.department_id"
           class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+          @keyup.enter="handleSearch"
         >
           <option value="">همه</option>
           <option v-for="dept in departments" :key="dept.id" :value="dept.id">
@@ -93,6 +111,7 @@ const props = defineProps({
   initialFilters: {
     type: Object,
     default: () => ({
+      full_name: '',
       personnel_number: '',
       national_code: '',
       phone: '',
@@ -122,6 +141,7 @@ const handleSearch = () => {
 
 const handleClear = () => {
   tempFilters.value = {
+    full_name: '',
     personnel_number: '',
     national_code: '',
     phone: '',
