@@ -170,9 +170,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const { $api } = useNuxtApp()
+const route = useRoute()
+const router = useRouter()
 
 // State
 const users = ref([])
@@ -202,27 +205,50 @@ const fetchUsers = async () => {
   }
 }
 
+const updatePage = (page) => {
+  currentPage.value = page
+  // Update URL query parameter
+  router.push({
+    query: { ...route.query, page: page }
+  })
+  // Fetch data immediately
+  fetchUsers()
+}
+
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
-    currentPage.value++
-    fetchUsers()
+    updatePage(currentPage.value + 1)
   }
 }
 
 const prevPage = () => {
   if (currentPage.value > 1) {
-    currentPage.value--
-    fetchUsers()
+    updatePage(currentPage.value - 1)
   }
 }
 
 const goToPage = (page) => {
-  currentPage.value = page
-  fetchUsers()
+  updatePage(page)
 }
+
+// Watch for route query changes
+watch(
+  () => route.query.page,
+  (newPage) => {
+    const page = parseInt(newPage) || 1
+    if (page !== currentPage.value) {
+      currentPage.value = page
+      fetchUsers()
+    }
+  },
+  { immediate: true }
+)
 
 // Lifecycle
 onMounted(() => {
+  // Initialize page from URL query parameter
+  const page = parseInt(route.query.page) || 1
+  currentPage.value = page
   fetchUsers()
 })
 </script>
