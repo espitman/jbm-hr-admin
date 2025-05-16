@@ -1,6 +1,6 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-regular mb-6">داشبورد</h1>
+  <div class="p-1">
+    <h1 class="text-xl font-bold text-purple-700 mb-6">داشبورد</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <!-- Stats Cards -->
       <div class="bg-white rounded-lg shadow p-6">
@@ -60,6 +60,12 @@
       </div>
     </div>
 
+    <!-- User Events Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <BirthdayUsers />
+      <NewHires />
+    </div>
+
     <!-- Recent Activity Section -->
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-lg font-regular mb-4">فعالیت‌های اخیر</h2>
@@ -96,6 +102,8 @@
 </template>
 
 <script setup>
+import BirthdayUsers from '~/components/dashboard/BirthdayUsers.vue'
+import NewHires from '~/components/dashboard/NewHires.vue'
 // Page logic will be added later
 </script>
 
