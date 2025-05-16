@@ -1,15 +1,6 @@
 <template>
   <div class="bg-white rounded-lg shadow p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-semibold text-gray-900">تولدهای این ماه</h2>
-      <button 
-        v-if="users.length > 5"
-        @click="showModal = true"
-        class="text-sm text-purple-600 hover:text-purple-700 font-medium"
-      >
-        نمایش همه
-      </button>
-    </div>
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">همکاران شروع به کار کرده در ماه گذشته</h2>
     
     <div v-if="loading" class="flex justify-center items-center h-32">
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div>
@@ -21,48 +12,10 @@
 
     <div v-else>
       <div v-if="users.length === 0" class="text-gray-500 text-sm text-center py-4">
-        هیچ کاربری در این ماه تولد ندارد.
+        هیچ همکاری در ماه گذشته شروع به کار نکرده است.
       </div>
       
-      <div v-else>
-        <div class="space-y-4">
-          <div v-for="user in displayedUsers" :key="user.id" class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-            <div class="w-10 h-10 rounded-full overflow-hidden">
-              <img
-                v-if="user.avatar"
-                :src="user.avatar"
-                :alt="user.first_name + ' ' + user.last_name"
-                class="w-full h-full object-cover"
-              />
-              <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
-                <span class="text-gray-500 text-sm">{{ getInitials(user.first_name + ' ' + user.last_name) }}</span>
-              </div>
-            </div>
-            
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 truncate">
-                {{ user.first_name }} {{ user.last_name }}
-              </p>
-              <p class="text-xs text-gray-500">
-                {{ user.department?.title }}
-              </p>
-            </div>
-            
-            <div class="text-sm text-gray-500">
-              {{ $formatDateOnly(user.birthdate) }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <BaseModal
-      :is-open="showModal"
-      title="تولدهای این ماه"
-      size="lg"
-      @close="showModal = false"
-    >
-      <div class="space-y-4 max-h-[60vh] overflow-y-auto">
+      <div v-else class="space-y-4">
         <div v-for="user in sortedUsers" :key="user.id" class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
           <div class="w-10 h-10 rounded-full overflow-hidden">
             <img
@@ -86,30 +39,28 @@
           </div>
           
           <div class="text-sm text-gray-500">
-            {{ $formatDateOnly(user.birthdate) }}
+            {{ $formatDateOnly(user.cooperation_start_date) }}
           </div>
         </div>
       </div>
-    </BaseModal>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import BaseModal from '~/components/BaseModal.vue'
 
 const { $api, $formatDateOnly } = useNuxtApp()
 
 const users = ref([])
 const loading = ref(true)
 const error = ref(null)
-const showModal = ref(false)
 
 const fetchUsers = async () => {
   try {
     loading.value = true
     error.value = null
-    const response = await $api.get('/api/v1/admin/users/jalali-month-birthdate')
+    const response = await $api.get('/api/v1/admin/users/jalali-month-cooperation-start-date')
     users.value = response.data.users || []
   } catch (err) {
     error.value = err.message || 'خطا در دریافت اطلاعات'
@@ -128,8 +79,8 @@ const getInitials = (name) => {
 
 const sortedUsers = computed(() => {
   return [...users.value].sort((a, b) => {
-    const dateA = new Date(a.birthdate)
-    const dateB = new Date(b.birthdate)
+    const dateA = new Date(a.cooperation_start_date)
+    const dateB = new Date(b.cooperation_start_date)
     
     // Get month and day as numbers
     const monthA = dateA.getMonth() + 1
@@ -145,10 +96,6 @@ const sortedUsers = computed(() => {
     // If months are the same, compare days
     return dayA - dayB
   })
-})
-
-const displayedUsers = computed(() => {
-  return sortedUsers.value.slice(0, 5)
 })
 
 onMounted(() => {
