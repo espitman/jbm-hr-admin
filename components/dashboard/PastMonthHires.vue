@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">همکاران جدید این ماه</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">همکاران شروع به کار کرده در ماه گذشته</h2>
     
     <div v-if="loading" class="flex justify-center items-center h-32">
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div>
@@ -12,11 +12,11 @@
 
     <div v-else>
       <div v-if="users.length === 0" class="text-gray-500 text-sm text-center py-4">
-        هیچ همکار جدیدی در این ماه وجود ندارد.
+        هیچ همکاری در ماه گذشته شروع به کار نکرده است.
       </div>
       
       <div v-else class="space-y-4">
-        <div v-for="user in users" :key="user.id" class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+        <div v-for="user in sortedUsers" :key="user.id" class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
           <div class="w-10 h-10 rounded-full overflow-hidden">
             <img
               v-if="user.avatar"
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const { $api, $formatDateOnly } = useNuxtApp()
 
@@ -76,6 +76,27 @@ const getInitials = (name) => {
   }
   return name[0]
 }
+
+const sortedUsers = computed(() => {
+  return [...users.value].sort((a, b) => {
+    const dateA = new Date(a.cooperation_start_date)
+    const dateB = new Date(b.cooperation_start_date)
+    
+    // Get month and day as numbers
+    const monthA = dateA.getMonth() + 1
+    const monthB = dateB.getMonth() + 1
+    const dayA = dateA.getDate()
+    const dayB = dateB.getDate()
+    
+    // Compare months first
+    if (monthA !== monthB) {
+      return monthA - monthB
+    }
+    
+    // If months are the same, compare days
+    return dayA - dayB
+  })
+})
 
 onMounted(() => {
   fetchUsers()

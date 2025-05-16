@@ -63,7 +63,7 @@
     <!-- User Events Section -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <BirthdayUsers />
-      <NewHires />
+      <PastMonthHires />
     </div>
 
     <!-- Recent Activity Section -->
@@ -103,7 +103,7 @@
 
 <script setup>
 import BirthdayUsers from '~/components/dashboard/BirthdayUsers.vue'
-import NewHires from '~/components/dashboard/NewHires.vue'
+import PastMonthHires from '~/components/dashboard/PastMonthHires.vue'
 // Page logic will be added later
 </script>
 

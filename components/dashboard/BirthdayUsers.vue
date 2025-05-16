@@ -16,7 +16,7 @@
       </div>
       
       <div v-else class="space-y-4">
-        <div v-for="user in users" :key="user.id" class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+        <div v-for="user in sortedUsers" :key="user.id" class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
           <div class="w-10 h-10 rounded-full overflow-hidden">
             <img
               v-if="user.avatar"
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const { $api, $formatDateOnly } = useNuxtApp()
 
@@ -76,6 +76,27 @@ const getInitials = (name) => {
   }
   return name[0]
 }
+
+const sortedUsers = computed(() => {
+  return [...users.value].sort((a, b) => {
+    const dateA = new Date(a.birthdate)
+    const dateB = new Date(b.birthdate)
+    
+    // Get month and day as numbers
+    const monthA = dateA.getMonth() + 1
+    const monthB = dateB.getMonth() + 1
+    const dayA = dateA.getDate()
+    const dayB = dateB.getDate()
+    
+    // Compare months first
+    if (monthA !== monthB) {
+      return monthA - monthB
+    }
+    
+    // If months are the same, compare days
+    return dayA - dayB
+  })
+})
 
 onMounted(() => {
   fetchUsers()
