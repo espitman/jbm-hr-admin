@@ -75,6 +75,28 @@
         </select>
       </div>
 
+      <!-- Personnel Number -->
+      <div>
+        <label for="personnel_number" class="block text-sm font-medium text-gray-700 mb-1">شماره پرسنلی</label>
+        <input
+          id="personnel_number"
+          v-model="form.personnel_number"
+          type="text"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+        />
+      </div>
+
+      <!-- National Code -->
+      <div>
+        <label for="national_code" class="block text-sm font-medium text-gray-700 mb-1">کد ملی</label>
+        <input
+          id="national_code"
+          v-model="form.national_code"
+          type="text"
+          class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+        />
+      </div>
+
       <div class="pt-2">
         <button 
           type="submit" 
@@ -109,7 +131,9 @@ const props = defineProps({
       role: 'employee',
       first_name: '',
       last_name: '',
-      department_id: ''
+      department_id: '',
+      personnel_number: '',
+      national_code: ''
     })
   }
 })
@@ -123,7 +147,9 @@ const form = ref({
   role: 'employee',
   first_name: '',
   last_name: '',
-  department_id: ''
+  department_id: '',
+  personnel_number: '',
+  national_code: ''
 })
 
 const loading = ref(false)
@@ -141,7 +167,9 @@ watch(() => props.user, (newUser) => {
       role: newUser.role,
       first_name: newUser.first_name,
       last_name: newUser.last_name,
-      department_id: newUser.department?.id || ''
+      department_id: newUser.department?.id || '',
+      personnel_number: newUser.personnel_number || '',
+      national_code: newUser.national_code || ''
     }
   }
 }, { immediate: true })
