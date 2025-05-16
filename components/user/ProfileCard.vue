@@ -42,6 +42,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Confirmation Status -->
+    <div class="w-full mt-6 p-4 rounded-lg" :class="confirmed ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'">
+      <p class="text-sm font-medium text-center">
+        {{ confirmed ? 'اطلاعات توسط کاربر تایید شده است.' : 'اطلاعات هنوز توسط کاربر تایید نشده است.' }}
+      </p>
+    </div>
   </div>
 
   <!-- Upload Modal -->
@@ -116,27 +123,31 @@ const { $api, $formatDateOnly } = useNuxtApp()
 const props = defineProps({
   avatar: {
     type: String,
-    default: undefined
+    default: ''
   },
   name: {
     type: String,
-    default: 'کاربر'
+    required: true
   },
   role: {
     type: String,
-    default: 'کارمند'
+    required: true
   },
   userId: {
-    type: String,
+    type: [String, Number],
     required: true
   },
   birthdate: {
     type: String,
-    default: undefined
+    default: ''
   },
   cooperation_start_date: {
     type: String,
-    default: undefined
+    default: ''
+  },
+  confirmed: {
+    type: Boolean,
+    default: false
   }
 })
 

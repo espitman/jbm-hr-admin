@@ -20,6 +20,7 @@
           :userId="user.id"
           :birthdate="user.birthdate"
           :cooperation_start_date="user.cooperation_start_date"
+          :confirmed="user.confirmed"
           @update:avatar="handleAvatarUpdate"
           @update:birthdate="handleBirthdateUpdate"
           @update:cooperation_start_date="handleCooperationStartDateUpdate"
