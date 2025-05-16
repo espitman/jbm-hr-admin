@@ -61,6 +61,33 @@
           </div>
         </div>
 
+        <!-- Third Row: National Code and Personnel Number -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- National Code -->
+          <div>
+            <label for="national_code" class="block text-sm font-medium text-gray-700 mb-1">کد ملی</label>
+            <input
+              id="national_code"
+              v-model="form.national_code"
+              type="text"
+              class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+              required
+            >
+          </div>
+
+          <!-- Personnel Number -->
+          <div>
+            <label for="personnel_number" class="block text-sm font-medium text-gray-700 mb-1">شماره پرسنلی</label>
+            <input
+              id="personnel_number"
+              v-model="form.personnel_number"
+              type="text"
+              class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+              required
+            >
+          </div>
+        </div>
+
         <!-- Role -->
         <div>
           <label for="role" class="block text-sm font-medium text-gray-700 mb-1">نقش</label>
@@ -159,7 +186,9 @@ const form = ref({
   last_name: '',
   department_id: '',
   birthdate: '',
-  cooperation_start_date: ''
+  cooperation_start_date: '',
+  national_code: '',
+  personnel_number: ''
 })
 
 const departments = ref([])
@@ -194,7 +223,9 @@ const handleSubmit = async () => {
       last_name: '',
       department_id: '',
       birthdate: '',
-      cooperation_start_date: ''
+      cooperation_start_date: '',
+      national_code: '',
+      personnel_number: ''
     }
     
     // Show success toast
