@@ -1,6 +1,15 @@
 <template>
   <div class="p-1">
     <h1 class="text-xl font-bold text-purple-700 mb-6">مدیریت کاربران</h1>
+    
+    <!-- Filters -->
+    <UserFilters
+      :departments="departments"
+      :initial-filters="filters"
+      @search="handleSearch"
+      @clear="handleClear"
+    />
+
     <div class="bg-white rounded-lg shadow p-6">
       <!-- Loading state -->
       <div v-if="loading" class="flex justify-center items-center py-8">
@@ -172,6 +181,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import UserFilters from '~/components/user/UserFilters.vue'
 
 const { $api } = useNuxtApp()
 const route = useRoute()
@@ -185,6 +195,16 @@ const currentPage = ref(1)
 const limit = ref(10)
 const totalItems = ref(0)
 const totalPages = ref(0)
+const departments = ref([])
+
+// Filters
+const filters = ref({
+  personnel_number: '',
+  national_code: '',
+  phone: '',
+  role: '',
+  department_id: ''
+})
 
 // Methods
 const fetchUsers = async () => {
@@ -193,7 +213,8 @@ const fetchUsers = async () => {
     error.value = null
     const response = await $api.get('/api/v1/admin/users', {
       page: currentPage.value,
-      limit: limit.value
+      limit: limit.value,
+      ...filters.value
     })
     users.value = response.data.users
     totalItems.value = response.data.total
@@ -205,13 +226,69 @@ const fetchUsers = async () => {
   }
 }
 
+const fetchDepartments = async () => {
+  try {
+    const response = await $api.get('/api/v1/departments')
+    departments.value = response.data.departments || []
+  } catch (err) {
+    console.error('Error fetching departments:', err)
+  }
+}
+
 const updatePage = (page) => {
   currentPage.value = page
   // Update URL query parameter
   router.push({
-    query: { ...route.query, page: page }
+    query: { 
+      ...route.query,
+      page: page,
+      ...filters.value
+    }
   })
   // Fetch data immediately
+  fetchUsers()
+}
+
+const handleSearch = (newFilters) => {
+  // Update filters
+  filters.value = { ...newFilters }
+  // Reset to first page
+  currentPage.value = 1
+  
+  // Filter out empty values
+  const queryParams = Object.entries(newFilters).reduce((acc, [key, value]) => {
+    if (value !== '') {
+      acc[key] = value
+    }
+    return acc
+  }, { page: 1, _fromButton: true })
+
+  // Update URL with non-empty filters
+  router.push({ query: queryParams })
+  
+  // Fetch data with new filters
+  fetchUsers()
+}
+
+const handleClear = () => {
+  // Clear filters
+  filters.value = {
+    personnel_number: '',
+    national_code: '',
+    phone: '',
+    role: '',
+    department_id: ''
+  }
+  // Reset to first page
+  currentPage.value = 1
+  // Update URL to remove filters
+  router.push({
+    query: { 
+      page: 1,
+      _fromButton: true
+    }
+  })
+  // Fetch data without filters
   fetchUsers()
 }
 
@@ -233,23 +310,34 @@ const goToPage = (page) => {
 
 // Watch for route query changes
 watch(
-  () => route.query.page,
-  (newPage) => {
-    const page = parseInt(newPage) || 1
+  () => route.query,
+  (newQuery) => {
+    // Update filters from URL, only including non-empty values
+    filters.value = {
+      personnel_number: newQuery.personnel_number || '',
+      national_code: newQuery.national_code || '',
+      phone: newQuery.phone || '',
+      role: newQuery.role || '',
+      department_id: newQuery.department_id || ''
+    }
+    
+    // Update page
+    const page = parseInt(newQuery.page) || 1
     if (page !== currentPage.value) {
       currentPage.value = page
+    }
+    
+    // Only fetch data if the change came from URL (not from button clicks)
+    if (!newQuery._fromButton) {
       fetchUsers()
     }
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 )
 
 // Lifecycle
 onMounted(() => {
-  // Initialize page from URL query parameter
-  const page = parseInt(route.query.page) || 1
-  currentPage.value = page
-  fetchUsers()
+  fetchDepartments()
 })
 </script>
 
