@@ -59,6 +59,9 @@
             <div class="text-sm text-gray-500">
               {{ $formatDateOnly(user.birthdate) }}
             </div>
+            <div class="text-sm text-gray-500">
+              {{ user.age }} سال
+            </div>
           </div>
         </div>
       </div>
@@ -103,6 +106,9 @@
           
           <div class="text-sm text-gray-500">
             {{ $formatDateOnly(user.birthdate) }}
+          </div>
+          <div class="text-sm text-gray-500">
+            {{ user.age }} سال
           </div>
         </div>
       </div>
