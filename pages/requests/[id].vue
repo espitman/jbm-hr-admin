@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container mx-auto p-0">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-xl font-bold text-purple-700">جزئیات درخواست</h1>
     </div>

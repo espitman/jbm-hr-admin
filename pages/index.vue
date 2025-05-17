@@ -1,5 +1,5 @@
 <template>
-  <div class="p-1">
+  <div class="p-0">
     <h1 class="text-xl font-bold text-purple-700 mb-6">داشبورد</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <!-- Stats Cards -->

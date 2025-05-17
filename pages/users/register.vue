@@ -1,5 +1,5 @@
 <template>
-  <div class="p-1">
+  <div class="p-0">
     <h1 class="text-xl font-bold text-purple-700 mb-6">ثبت کاربر جدید</h1>
     <div class="bg-white rounded-lg shadow p-6">
       <form

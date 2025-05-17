@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-1">
+  <div class="container mx-auto p-0">
     <h1 class="text-xl font-bold text-purple-700 mb-6">ویرایش پروفایل</h1>
     
     <div v-if="loading" class="flex justify-center items-center h-64">

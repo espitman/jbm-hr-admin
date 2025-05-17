@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-1">
+  <div class="container mx-auto p-0">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-xl font-bold text-purple-700">دپارتمان‌ها</h1>
       <button

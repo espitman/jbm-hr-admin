@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-1">
+  <div class="container mx-auto p-0">
     <div class="mb-6">
       <h1 class="text-xl font-bold text-purple-700">جزئیات رزومه</h1>
     </div>
