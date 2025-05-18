@@ -46,6 +46,9 @@
                   دپارتمان
                 </th>
                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  وضعیت
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   عملیات
                 </th>
               </tr>
@@ -87,6 +90,16 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ user.department?.title || '-' }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span 
+                    :class="[
+                      'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                      user.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    ]"
+                  >
+                    {{ user.active ? 'فعال' : 'غیرفعال' }}
+                  </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <NuxtLink :to="`/users/${user.id}`">
