@@ -53,7 +53,7 @@
     <div class="mt-4 w-full">
       <button
         v-if="props.active"
-        @click="handleStatusChange"
+        @click="openStatusModal"
         :disabled="isUpdatingStatus"
         class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
       >
@@ -62,7 +62,7 @@
       </button>
       <button
         v-else
-        @click="handleStatusChange"
+        @click="openStatusModal"
         :disabled="isUpdatingStatus"
         class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
       >
@@ -71,6 +71,42 @@
       </button>
     </div>
   </div>
+
+  <!-- Status Change Modal -->
+  <BaseModal
+    :is-open="isStatusModalOpen"
+    :title="props.active ? 'غیرفعال کردن کاربر' : 'فعال کردن کاربر'"
+    size="md"
+    :show-cancel-button="false"
+    :show-footer="false"
+    @close="closeStatusModal"
+  >
+    <div class="space-y-6">
+      <p class="text-gray-700 text-center">
+        آیا از {{ props.active ? 'غیرفعال' : 'فعال' }} کردن کاربر
+        <span class="font-bold">{{ name }}</span>
+        اطمینان دارید؟
+      </p>
+
+      <div class="pt-2 flex gap-4">
+        <button
+          @click="handleStatusChange"
+          class="flex-[2] flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white"
+          :class="props.active ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'"
+          :disabled="isUpdatingStatus"
+        >
+          <span v-if="isUpdatingStatus" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+          <span v-else>{{ props.active ? 'غیرفعال کردن' : 'فعال کردن' }}</span>
+        </button>
+        <button
+          @click="closeStatusModal"
+          class="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+        >
+          انصراف
+        </button>
+      </div>
+    </div>
+  </BaseModal>
 
   <!-- Upload Modal -->
   <BaseModal
@@ -184,6 +220,7 @@ const selectedDate = ref(null)
 const editingField = ref(null)
 const isDateUpdating = ref(false)
 const isUpdatingStatus = ref(false)
+const isStatusModalOpen = ref(false)
 
 const dateModalTitle = computed(() => {
   return editingField.value === 'birthdate' ? 'تغییر تاریخ تولد' : 'تغییر تاریخ شروع همکاری'
@@ -249,11 +286,15 @@ const getInitials = (name) => {
   return name[0]
 }
 
-const handleStatusChange = async () => {
-  if (!confirm(props.active ? 'آیا از غیرفعال کردن کاربر اطمینان دارید؟' : 'آیا از فعال کردن کاربر اطمینان دارید؟')) {
-    return
-  }
+const openStatusModal = () => {
+  isStatusModalOpen.value = true
+}
 
+const closeStatusModal = () => {
+  isStatusModalOpen.value = false
+}
+
+const handleStatusChange = async () => {
   try {
     isUpdatingStatus.value = true
     const endpoint = props.active 
@@ -263,6 +304,7 @@ const handleStatusChange = async () => {
     await $api.put(endpoint)
     emit('success')
     toast.success(props.active ? 'کاربر با موفقیت غیرفعال شد' : 'کاربر با موفقیت فعال شد')
+    closeStatusModal()
   } catch {
     toast.error('خطا در تغییر وضعیت کاربر')
   } finally {
