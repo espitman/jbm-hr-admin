@@ -15,12 +15,13 @@
       <div class="col-span-1 space-y-6">
         <ProfileCard
           :avatar="user.avatar"
+          :confirmed="user.confirmed"
           :name="user.first_name + ' ' + user.last_name"
           :role="user.role === 'admin' ? 'مدیر' : 'کارمند'"
           :userId="user.id"
           :birthdate="user.birthdate"
           :cooperation_start_date="user.cooperation_start_date"
-          :confirmed="user.confirmed"
+          :active="user.active"
           @update:avatar="handleAvatarUpdate"
           @update:birthdate="handleBirthdateUpdate"
           @update:cooperation_start_date="handleCooperationStartDateUpdate"

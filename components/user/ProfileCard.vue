@@ -49,6 +49,27 @@
         {{ confirmed ? 'اطلاعات توسط کاربر تایید شده است.' : 'اطلاعات هنوز توسط کاربر تایید نشده است.' }}
       </p>
     </div>
+
+    <div class="mt-4 w-full">
+      <button
+        v-if="props.active"
+        @click="handleStatusChange"
+        :disabled="isUpdatingStatus"
+        class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+      >
+        <span v-if="isUpdatingStatus">در حال پردازش...</span>
+        <span v-else>غیرفعال کردن کاربر</span>
+      </button>
+      <button
+        v-else
+        @click="handleStatusChange"
+        :disabled="isUpdatingStatus"
+        class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+      >
+        <span v-if="isUpdatingStatus">در حال پردازش...</span>
+        <span v-else>فعال کردن کاربر</span>
+      </button>
+    </div>
   </div>
 
   <!-- Upload Modal -->
@@ -145,6 +166,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  active: {
+    type: Boolean,
+    default: false
+  },
   confirmed: {
     type: Boolean,
     default: false
@@ -158,6 +183,7 @@ const isDateModalOpen = ref(false)
 const selectedDate = ref(null)
 const editingField = ref(null)
 const isDateUpdating = ref(false)
+const isUpdatingStatus = ref(false)
 
 const dateModalTitle = computed(() => {
   return editingField.value === 'birthdate' ? 'تغییر تاریخ تولد' : 'تغییر تاریخ شروع همکاری'
@@ -221,5 +247,26 @@ const getInitials = (name) => {
     return `${parts[0][0]}${parts[1][0]}`
   }
   return name[0]
+}
+
+const handleStatusChange = async () => {
+  if (!confirm(props.active ? 'آیا از غیرفعال کردن کاربر اطمینان دارید؟' : 'آیا از فعال کردن کاربر اطمینان دارید؟')) {
+    return
+  }
+
+  try {
+    isUpdatingStatus.value = true
+    const endpoint = props.active 
+      ? `/api/v1/admin/users/${props.userId}/deactivate`
+      : `/api/v1/admin/users/${props.userId}/active`
+    
+    await $api.put(endpoint)
+    emit('success')
+    toast.success(props.active ? 'کاربر با موفقیت غیرفعال شد' : 'کاربر با موفقیت فعال شد')
+  } catch {
+    toast.error('خطا در تغییر وضعیت کاربر')
+  } finally {
+    isUpdatingStatus.value = false
+  }
 }
 </script> 
