@@ -16,6 +16,9 @@ export default defineNuxtConfig({
     port: 3100
   },
   app: {
-    baseURL: '/admin/'
+    baseURL: '/admin/',
+    head: {
+      title: 'فهرست آشنایی - مدیریت'
+    }
   }
 })
