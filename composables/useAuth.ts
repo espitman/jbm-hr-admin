@@ -5,6 +5,7 @@ interface User {
   username: string
   email: string
   name: string
+  role: string
   // Add other user properties as needed
 }
 
@@ -22,10 +23,15 @@ export const useAuth = () => {
   const checkAuth = () => {
     const token = useCookie('auth_token')
     const storedUser = getLocalStorage()?.getItem('user')
-    
     if (token.value && storedUser) {
-      isAuthenticated.value = true
-      user.value = JSON.parse(storedUser)
+      const parsedUser = JSON.parse(storedUser)
+      if (parsedUser.role === 'admin') {
+        isAuthenticated.value = true
+        user.value = parsedUser
+      } else {
+        isAuthenticated.value = false
+        user.value = null
+      }
     } else {
       isAuthenticated.value = false
       user.value = null
