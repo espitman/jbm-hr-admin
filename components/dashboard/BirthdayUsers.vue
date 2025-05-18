@@ -60,7 +60,7 @@
               {{ $formatDateOnly(user.birthdate) }}
             </div>
             <div class="text-sm text-gray-500">
-              {{ user.age }} سال
+              {{ $toPersianDigits(user.age) }} سال
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
             {{ $formatDateOnly(user.birthdate) }}
           </div>
           <div class="text-sm text-gray-500">
-            {{ user.age }} سال
+            {{ $toPersianDigits(user.age) }} سال
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@
 import { ref, onMounted, computed } from 'vue'
 import BaseModal from '~/components/BaseModal.vue'
 
-const { $api, $formatDateOnly } = useNuxtApp()
+const { $api, $formatDateOnly, $toPersianDigits } = useNuxtApp()
 
 const users = ref([])
 const loading = ref(true)
